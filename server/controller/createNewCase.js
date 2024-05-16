@@ -17,7 +17,7 @@ export const createNewCase = (req, res) => {
   });
   dbAddNewCase(pdfIdsMap, req)
     .then((result) => {
-      res.status(200).json({ message: "Registration successful" });
+      res.status(200).json({ message: "Data successfully Save" });
     })
     .catch((err) => {
       res.status(400).json({ message: "Error" });

@@ -1,10 +1,39 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { IP } from "../utils/IP";
+
+interface caseListMetaData {
+  address: string;
+  caseId: string;
+  caseIdInput: string;
+  caseStatus: string;
+  caseTitle: string;
+  caseType: string;
+  childName: string;
+  gender: string;
+  nextHearingDate: Date;
+}
 
 const CaseTracker = () => {
+  const [caseList, setCaseList] = useState<caseListMetaData[]>([]);
   const navigate = useNavigate();
   const openCaseDetails = (id: any) => {
     navigate(`/case/case-tracker/${id}`);
   };
+  const getCaseListInfo = () => {
+    axios
+      .get(IP.API + "caselist")
+      .then((res) => {
+        setCaseList(res.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+  useEffect(() => {
+    getCaseListInfo();
+  }, []);
   return (
     <div>
       <h3>Dashboard</h3>
@@ -37,63 +66,22 @@ const CaseTracker = () => {
                 <th scope="col">Case Type</th>
                 <th scope="col">Case Status</th>
                 <th scope="col">Next Hearing Date</th>
-                <th scope="col">Case Status</th>
                 {/* <th scope="col">Action</th> */}
               </tr>
             </thead>
             <tbody>
-              <tr onClick={() => openCaseDetails(123445)}>
-                <th scope="row">ABCD</th>
-                <td>M</td>
-                <td>Otto</td>
-                <td>123434</td>
-                <td>Mark</td>
-                <td>Child Labour</td>
-                <td>Open</td>
-                <td>12-04-2024</td>
-                <td>Progress</td>
-
-                {/* <td>
-                  <button
-                    className="btn"
-                    onClick={() => openCaseDetails(123434)}
-                  >
-                    <i className="fa-solid fa-info"></i>
-                  </button>
-                </td> */}
-              </tr>
-
-              <tr onClick={() => openCaseDetails(123445)}>
-                <th scope="row">ABCDD</th>
-                <td>F</td>
-                <td>Otto</td>
-                <td>123445</td>
-                <td>Mark</td>
-                <td>Child Labour</td>
-                <td>Open</td>
-                <td>12-04-2024</td>
-                <td>Progress</td>
-                {/* <td>
-                  <button
-                    className="btn"
-                    onClick={() => openCaseDetails(123445)}
-                  >
-                    <i className="fa-solid fa-info"></i>
-                  </button>
-                </td> */}
-              </tr>
-
-              <tr onClick={() => openCaseDetails(123435)}>
-                <th scope="row">ABCDD</th>
-                <td>M</td>
-                <td>Otto</td>
-                <td>123435</td>
-                <td>Mark</td>
-                <td>Child Labour</td>
-                <td>Open</td>
-                <td>12-04-2024</td>
-                <td>Progress</td>
-                {/* <td>
+              {caseList.map((val, index) => {
+                return (
+                  <tr key={index} onClick={() => openCaseDetails(val.caseId)}>
+                    <th scope="row">{val.childName}</th>
+                    <td>{val.gender}</td>
+                    <td>{val.address}</td>
+                    <td>{val.caseIdInput}</td>
+                    <td>{val.caseTitle}</td>
+                    <td>{val.caseType}</td>
+                    <td>{val.caseStatus}</td>
+                    <td>{val.nextHearingDate.toString()}</td>
+                    {/* <td>
                   <button
                     className="btn"
                     onClick={() => openCaseDetails(123435)}
@@ -101,7 +89,9 @@ const CaseTracker = () => {
                     <i className="fa-solid fa-info"></i>
                   </button>
                 </td> */}
-              </tr>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>

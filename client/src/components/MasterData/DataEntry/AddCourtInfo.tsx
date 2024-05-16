@@ -1,4 +1,6 @@
+import axios from "axios";
 import { useRef, useState } from "react";
+import { IP } from "../../utils/IP";
 
 interface props {
   closeAddComponent: (e: boolean,type:string) => void;
@@ -6,8 +8,20 @@ interface props {
 }
 
 export const AddCourtInfo: React.FC<props> = ({ closeAddComponent,type }) => {
-  const bankNameInput = useRef<any>("");
-  const addressInput = useRef<any>("");
+  const infoInput = useRef<HTMLInputElement>(null);
+  const handleAdd = () =>{
+    const body ={
+      infoInput:infoInput.current?.value
+    }
+    axios.post(IP.API + type, body).then(res=>{
+      console.log(res.data);
+       closeAddComponent(false,type);
+    }).catch(err=>{
+      console.log(err);
+       closeAddComponent(false,type);
+    })
+   
+  }
   return (
     <div className="popup">
       <div
@@ -48,7 +62,7 @@ export const AddCourtInfo: React.FC<props> = ({ closeAddComponent,type }) => {
                     className="form-control"
                     id="floatingInput1"
                     placeholder="Enter Bank Name"
-                    ref={bankNameInput}
+                    ref={infoInput}
                   />
                   <label htmlFor="floatingInput1">New {type} Name</label>
                 </div>
@@ -69,7 +83,7 @@ export const AddCourtInfo: React.FC<props> = ({ closeAddComponent,type }) => {
                 </button>
               </div>
               <div className="col-lg-6 col-md-6 col-12">
-                <button style={{ width: "100%", backgroundColor: "#0A6862" }}>
+                <button onClick={handleAdd} style={{ width: "100%", backgroundColor: "#0A6862" }}>
                   ADD
                 </button>
               </div>

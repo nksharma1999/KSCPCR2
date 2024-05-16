@@ -844,6 +844,7 @@ const AddNewCaseForm = () => {
                     className="form-control"
                     id="floatingInput"
                     placeholder="name@example.com"
+                    accept="application/pdf"
                     onChange={handleMedicalReportsPdfChange}
                   />
                   <label htmlFor="floatingInput">Medical Reports: <strong>{medicalReportsPdf?.name}</strong></label>
@@ -856,6 +857,7 @@ const AddNewCaseForm = () => {
                     className="form-control"
                     id="floatingInput2"
                     placeholder="name@example.com"
+                    accept="application/pdf"
                     onChange={handleWitnessStatementsPdfChange}
                   />
                   <label htmlFor="floatingInput2">Witness Statements: <strong>{witnessStatementsPdf?.name}</strong></label>
@@ -868,6 +870,7 @@ const AddNewCaseForm = () => {
                     className="form-control"
                     id="floatingInput42"
                     placeholder="name@example.com"
+                    accept="application/pdf"
                     onChange={handlePoliceReportsPdfChange}
                   />
                   <label htmlFor="floatingInput42">Police Reports: <strong>{policeReportsPdf?.name}</strong></label>
@@ -880,6 +883,7 @@ const AddNewCaseForm = () => {
                     className="form-control"
                     id="floatingInput3"
                     placeholder="name@example.com"
+                    accept="application/pdf"
                     onChange={handlePhotographsPdfChange}
                   />
                   <label htmlFor="floatingInput3">
@@ -894,6 +898,7 @@ const AddNewCaseForm = () => {
                     className="form-control"
                     id="floatingInput4"
                     placeholder="name@example.com"
+                    accept="application/pdf"
                     onChange={handleTestimonyPdfChange}
                   />
                   <label htmlFor="floatingInput4"> Child's Testimony: <strong>{testimonyPdf?.name}</strong> </label>
@@ -906,6 +911,7 @@ const AddNewCaseForm = () => {
                     className="form-control"
                     id="floatingInput5"
                     placeholder="name@example.com"
+                    accept="application/pdf"
                     onChange={handleSchoolRecordsPdfChange}
                   />
                   <label htmlFor="floatingInput5"> School Records: <strong>{schoolRecordsPdf?.name}</strong> </label>
@@ -1159,5 +1165,4 @@ const AddNewCaseForm = () => {
     </>
   );
 };
-
 export default AddNewCaseForm;
