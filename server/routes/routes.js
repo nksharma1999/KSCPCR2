@@ -6,8 +6,8 @@ import {addNewDistrict,getDistrictList,updateDistrict,removeDistrict} from '../c
 import {addNewCity,getCityList,updateCity,removeCity} from '../controller/masterData/address/city.js'
 import {addNewTaluk,getTalukList,updateTaluk,removeTaluk} from '../controller/masterData/address/taluk.js'
 import {addNewVillage,getVillageList,updateVillage,removeVillage} from '../controller/masterData/address/village.js'
-import {addNewCourt,getCourtList} from '../controller/masterData/court/court.js'
-import {addNewJurisdiction,getJurisdictionList} from '../controller/masterData/court/jurisdiction.js'
+import {addNewCourt,getCourtList,removeCourt,updateCourt} from '../controller/masterData/court/court.js'
+import {addNewJurisdiction,getJurisdictionList,removeJurisdiction,updateJurisdiction} from '../controller/masterData/court/jurisdiction.js'
 import {createNewCasePdfType} from '../PDFType/createNewCasePdfType.js'
 import {updateChildInfo} from '../controller/caseInfoUpdate/updateChildInfo.js';
 import {updateCaseDetails} from '../controller/caseInfoUpdate/updateCaseDetails.js';
@@ -43,7 +43,7 @@ userRoutes.delete("/state/:id",removeState);
 userRoutes.get("/district",getDistrictList);
 userRoutes.post("/addNewDistrict",addNewDistrict);
 userRoutes.put("/district/:id",updateDistrict);
-userRoutes.delete("/district':id",removeDistrict);
+userRoutes.delete("/district/:id",removeDistrict);
 //City
 userRoutes.get("/city",getCityList);
 userRoutes.post("/addNewCity",addNewCity);
@@ -62,7 +62,11 @@ userRoutes.delete("/village/:id",removeVillage);
 //Court
 userRoutes.get("/Court",getCourtList);
 userRoutes.post("/Court",addNewCourt);
+userRoutes.put("/Court/:id",updateCourt);
+userRoutes.delete("/Court/:id",removeCourt);
 //Jurisdiction
 userRoutes.get("/Jurisdiction",getJurisdictionList);
 userRoutes.post("/Jurisdiction",addNewJurisdiction);
+userRoutes.put("/Jurisdiction/:id",updateJurisdiction);
+userRoutes.delete("/Jurisdiction/:id",removeJurisdiction);
 export default userRoutes;

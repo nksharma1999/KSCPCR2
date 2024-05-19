@@ -1,12 +1,14 @@
 import sql from "mssql";
+import dotenv from 'dotenv';
+dotenv.config();
 const config = {
-  user: "sa",
-  password: "Nand1234",
-  server: "localhost", // You can use 'localhost\\instance' to connect to named instance
-  database: "kscpcr",
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  server: process.env.DB_SERVER_IP, // You can use 'localhost\\instance' to connect to named instance
+  database: process.env.DB_DATABASE,
   options: {
     trustServerCertificate: true,
-    trustedConnection: true, // Use Windows authentication (omit if using SQL authentication)
+    trustedConnection: true, 
     encrypt: true,
   },
 };
@@ -14,7 +16,7 @@ let pool = null;
 export const initializeDbConnection = async () => {
     try {
         // Connect to the database
-        pool = await sql.connect(config);
+        pool = sql.connect(config);
         console.log("Connected to MSSQL database");
         return pool;
     } catch (err) {
