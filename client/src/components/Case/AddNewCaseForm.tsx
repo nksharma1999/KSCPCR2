@@ -36,6 +36,7 @@ const AddNewCaseForm = () => {
     childNameInput:'',
     ageInput:'',
     dobInput:'',
+    genderInput:'',
     guradianInput:'',
     educationalBgInput:'',
     addressInput:'',
@@ -47,7 +48,7 @@ const AddNewCaseForm = () => {
       [name]: value
     }));
   }
-  const [selectedGender,setSelectedGender] = useState<string>('male');
+  const [selectedGender,setSelectedGender] = useState<string>('select');
   const handleGenderChange =(e:any)=>{
     setSelectedGender(e.target.value);
   }
@@ -71,6 +72,33 @@ const AddNewCaseForm = () => {
     // alert(addressInput.current?.value);
     // alert(selectedVillage)
   }
+  const validateChildInformation = () => {
+    const { childNameInput, ageInput, dobInput,genderInput, guradianInput, educationalBgInput, addressInput} = childInformationInput;
+    if (
+      !childNameInput ||
+      !ageInput ||
+      !dobInput ||
+      !genderInput||
+      !guradianInput ||
+      !educationalBgInput ||
+      !addressInput ||
+      selectedCaseType === "select" ||
+      selectedCasePriority === "select" ||
+      selectedCaseStatus === "select"
+     
+) {
+      alert("Please fill out all fields and select options in child information.");
+      return false;
+    }
+    return true;
+  };
+
+  const handleChildInformation = () => {
+    if (validateChildInformation()) {
+      alert("child information Saved!");
+      handleNextBtn();
+    }
+  };
 
   //Handle Page Number 2 Inputs
   const [caseDetailsInput,setCaseDetailsInput] = useState({
@@ -99,10 +127,35 @@ const AddNewCaseForm = () => {
   const handleCaseStatusChange =(e:any)=>{
     setSelectedCaseStatus(e.target.value);
   }
-  const handleCaseDetails =() =>{
+  // const handleCaseDetails =() =>{
     // alert(caseIdInput.current?.value);
-    alert(selectedCaseStatus)
-  }
+  //   alert(selectedCaseStatus)
+  // }
+
+  const validateCaseDetails = () => {
+    const { caseIdInput, caseTitleInput, caseDescriptionInput, courtNameInput, jurisdictionInput } = caseDetailsInput;
+    if (
+      !caseIdInput ||
+      !caseTitleInput ||
+      !caseDescriptionInput ||
+      !courtNameInput ||
+      !jurisdictionInput ||
+      selectedCaseType === "select" ||
+      selectedCasePriority === "select" ||
+      selectedCaseStatus === "select"
+    ) {
+      alert("Please fill out all fields and select options in Case Details.");
+      return false;
+    }
+    return true;
+  };
+
+  const handleCaseDetails = () => {
+    if (validateCaseDetails()) {
+      alert("Case Details Saved!");
+      handleNextBtn();
+    }
+  };
   //Handle Page Number 3 Inputs
   const [legalRepresentationInput,setLegalRepresentationInput] = useState({
     lawyerInput:'',
@@ -117,9 +170,24 @@ const AddNewCaseForm = () => {
       [name]: value
     }));
   }
-  const handleLegalRepresentation =() =>{
+  // const handleLegalRepresentation =() =>{
     // alert(petitionerInput.current?.value);
-  }
+  // }
+  const validateLegalRepresentation = () => {
+    const { lawyerInput, petitionerInput, respondentInput, legalAidDetailsInput } = legalRepresentationInput;
+    if (!lawyerInput || !petitionerInput || !respondentInput || !legalAidDetailsInput) {
+      alert("Please fill out all fields in Legal Representation.");
+      return false;
+    }
+    return true;
+  };
+
+  const handleLegalRepresentation = () => {
+    if (validateLegalRepresentation()) {
+      alert("Legal Representation Saved!");
+      handleNextBtn();
+    }
+  };
   //Handle Page Number 4 Inputs
   const [protectionOrderPdf, setProtectionOrderPdf] = useState<File | null>(null);
   const handleProtectioOrdersPdfChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -139,11 +207,25 @@ const AddNewCaseForm = () => {
       setRestrainingOrderPdf(e.target.files[0]);
     }
   };
-  const handleChildProtectionMeasures=()=>{
-    console.log(protectionOrderPdf);
-    console.log(placementOrderPdf);
-    console.log(restrainingOrderPdf);
-  }
+  // const handleChildProtectionMeasures=()=>{
+  //   console.log(protectionOrderPdf);
+  //   console.log(placementOrderPdf);
+  //   console.log(restrainingOrderPdf);
+  // }
+  const validateChildProtectionMeasures = () => {
+    if (!protectionOrderPdf || !placementOrderPdf || !restrainingOrderPdf) {
+      alert("Please upload all required PDFs in Child Protection Measures.");
+      return false;
+    }
+    return true;
+  };
+
+  const handleChildProtectionMeasures = () => {
+    if (validateChildProtectionMeasures()) {
+      alert("Child Protection Measures Saved!");
+      handleNextBtn();
+    }
+  };
   //Handle Page Number 5 Inputs
   const [medicalReportsPdf, setMedicalReportsPdf] = useState<File | null>(null);
   const handleMedicalReportsPdfChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -181,14 +263,36 @@ const AddNewCaseForm = () => {
       setSchoolRecordsPdf(e.target.files[0]);
     }
   };
-  const handleEvidence=() =>{
-    console.log(medicalReportsPdf);
-    console.log(witnessStatementsPdf);
-    console.log(policeReportsPdf);
-    console.log(photographsPdf);
-    console.log(testimonyPdf);
-    console.log(schoolRecordsPdf);
-  }
+  // const handleEvidence=() =>{
+  //   console.log(medicalReportsPdf);
+  //   console.log(witnessStatementsPdf);
+  //   console.log(policeReportsPdf);
+  //   console.log(photographsPdf);
+  //   console.log(testimonyPdf);
+  //   console.log(schoolRecordsPdf);
+  // }
+  const validateEvidence = () => {
+    if (
+      !medicalReportsPdf ||
+      !witnessStatementsPdf ||
+      !policeReportsPdf ||
+      !photographsPdf ||
+      !testimonyPdf ||
+      !schoolRecordsPdf
+    ) {
+      alert("Please upload all required PDFs in Evidence and Documentation.");
+      return false;
+    }
+    return true;
+  };
+
+  const handleEvidence = () => {
+    if (validateEvidence()) {
+      alert("Evidence and Documentation Saved!");
+      handleNextBtn();
+    }
+  };
+
   //Handle Page Number 6 Inputs
 
   const [caseManagementInput,setCaseManagementInput] = useState({
@@ -205,9 +309,33 @@ const AddNewCaseForm = () => {
       [name]: value
     }));
   }
-  const handleCaseManagement=() =>{
+  // const handleCaseManagement=() =>{
 
-  }
+  // }
+  const validatecaseManagement = () => {
+    const { caseTimelineInput, nextHearingDateInput, nextStepsandActionInput, taskAssignmentInput, caseNotesandUpdatesInput } = caseManagementInput;
+    if (
+      !caseTimelineInput ||
+      !nextHearingDateInput ||
+      !nextStepsandActionInput ||
+      !taskAssignmentInput ||
+      !caseNotesandUpdatesInput ||
+      selectedCaseType === "select" ||
+      selectedCasePriority === "select" ||
+      selectedCaseStatus === "select"
+    ) {
+      alert("Please fill out all fields and select options in Case Management.");
+      return false;
+    }
+    return true;
+  };
+
+  const handleCaseManagement = () => {
+    if (validatecaseManagement()) {
+      alert("Case Details Saved!");
+      handleNextBtn();
+    }
+  };
   //Handle Page Number 7 Inputs
   const [courtOrdersPdf, setCourtOrdersPdf] = useState<File | null>(null);
   const handleCourtOrdersPdfChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -225,12 +353,29 @@ const AddNewCaseForm = () => {
     console.log(courtOrdersPdf)
     console.log(judgementsPdf)
   }
+  const validatecourtOrdersAndJudgements = () => {
+    if (!courtOrdersPdf || !judgementsPdf) {
+      alert("Please upload all required PDFs in Court Order and Judgements.");
+      return false;
+    }
+    return true;
+  };
+
+  const handlecourtOrdersAndJudgements = () => {
+    if (validatecourtOrdersAndJudgements()) {
+      alert("Court Order and Judgements Saved!");
+      handleNextBtn();
+    }
+  };
+  
   //Handle Page Number 8 Inputs
   const postCaseMonitoringInput = useRef<HTMLInputElement>(null);
   const followUpActionInput = useRef<HTMLInputElement>(null);
   
   const handleSubmitBtn =() =>{
+    
     const formData = new FormData();
+    
     //Page Number 1
     const ChildInformationData ={
       ...childInformationInput,
@@ -492,7 +637,7 @@ const AddNewCaseForm = () => {
                 </button>
               </div>
               <div>
-                <button className="btn btn-primary" onClick={saveChildInformation}> Save</button>
+                <button className="btn btn-primary" onClick={handleChildInformation}> Save</button>
               </div>
               <div>
                 <button className="btn" onClick={handleNextBtn}>
@@ -1097,7 +1242,7 @@ const AddNewCaseForm = () => {
                 </button>
               </div>
               <div>
-                <button className="btn btn-primary" onClick={courtOrdersAndJudgements}> Save</button>
+                <button className="btn btn-primary" onClick={handlecourtOrdersAndJudgements}> Save</button>
               </div>
               <div>
                 <button className="btn" onClick={handleNextBtn}>
