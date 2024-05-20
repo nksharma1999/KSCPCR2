@@ -12,6 +12,42 @@ const sqlRequest = async () => {
     }
   });
 };
+//Case Details Update
+export const dbUpdateChildInfo = (id, data) => {
+  return new Promise(async (resolve, reject) => {
+    sqlRequest()
+      .then((request) => {
+        request.query(
+          `update CaseDetails set childName = '${
+            data.childNameInput
+          }',age =${parseInt(data.ageInput)} ,
+          dob = '${data.dobInput}', guradian= '${
+            data.guradianInput
+          }',educationalBg='${data.educationalBgInput}',
+          address='${data.addressInput}',gender='${
+            data.selectedGender
+          }',state= ${parseInt(data.selectedState)},city=${parseInt(
+            data.selectedCity
+          )},
+          taluk=${parseInt(data.selectedTaluk)},village=${parseInt(
+            data.selectedVillage
+          )}  where caseId = '${id.id}' `,
+          (error) => {
+            if (error) {
+              console.error("Error Data", error);
+              reject("Db Query Error");
+            } else {
+              resolve("Child Info Updated!");
+            }
+          }
+        );
+      })
+      .catch((error) => {
+        console.error("Function Location (dbUpdateChildInfo)", error);
+        reject("Server Error");
+      });
+  });
+};
 //Jurisdiction
 export const dbRemoveJurisdiction = (id) => {
   return new Promise(async (resolve, reject) => {

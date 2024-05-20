@@ -19,7 +19,7 @@ interface CaseDetailsMetaData{
   city: number,
   courtName:number,
   createdDate: Date
-  dob:Date,
+  dob:string,
   educationalBg:string
   followUpActionInput:string
   gender:string,
@@ -346,7 +346,7 @@ const CaseDetails = () => {
       setChildInformationInput({
         childNameInput:data.childName,
         ageInput:data.age.toString(),
-        dobInput:'2024-05-10',
+        dobInput: data.dob.split('T')[0],
         guradianInput:data.guradian,
         educationalBgInput:data.educationalBg,
         addressInput:data.address
