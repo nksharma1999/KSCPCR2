@@ -78,13 +78,14 @@ const AddNewCaseForm = () => {
       !childNameInput ||
       !ageInput ||
       !dobInput ||
-      !genderInput||
       !guradianInput ||
       !educationalBgInput ||
       !addressInput ||
-      selectedCaseType === "select" ||
-      selectedCasePriority === "select" ||
-      selectedCaseStatus === "select"
+      selectedGender === "select" ||
+      selectedState === "select" ||
+      selectedCity === "select" ||
+      selectedTaluk === "select" ||
+      selectedVillage === "select" 
      
 ) {
       alert("Please fill out all fields and select options in child information.");
@@ -319,10 +320,7 @@ const AddNewCaseForm = () => {
       !nextHearingDateInput ||
       !nextStepsandActionInput ||
       !taskAssignmentInput ||
-      !caseNotesandUpdatesInput ||
-      selectedCaseType === "select" ||
-      selectedCasePriority === "select" ||
-      selectedCaseStatus === "select"
+      !caseNotesandUpdatesInput 
     ) {
       alert("Please fill out all fields and select options in Case Management.");
       return false;
@@ -332,7 +330,7 @@ const AddNewCaseForm = () => {
 
   const handleCaseManagement = () => {
     if (validatecaseManagement()) {
-      alert("Case Details Saved!");
+      alert("Case Management Saved!");
       handleNextBtn();
     }
   };
@@ -637,10 +635,10 @@ const AddNewCaseForm = () => {
                 </button>
               </div>
               <div>
-                <button className="btn btn-primary" onClick={handleChildInformation}> Save</button>
+                {/* <button className="btn btn-primary" onClick={handleChildInformation}> Save</button> */}
               </div>
               <div>
-                <button className="btn" onClick={handleNextBtn}>
+                <button className="btn" onClick={handleChildInformation}>
                   <i
                     className="fa-solid fa-angles-right"
                     style={{ fontSize: "30px" }}
@@ -796,10 +794,10 @@ const AddNewCaseForm = () => {
                 </button>
               </div>
               <div>
-                <button className="btn btn-primary" onClick={handleCaseDetails}> Save</button>
+                {/* <button className="btn btn-primary" onClick={handleCaseDetails}> Save</button> */}
               </div>
               <div>
-                <button className="btn" onClick={handleNextBtn}>
+                <button className="btn" onClick={handleCaseDetails}>
                   <i
                     className="fa-solid fa-angles-right"
                     style={{ fontSize: "30px" }}
@@ -889,10 +887,10 @@ const AddNewCaseForm = () => {
                 </button>
               </div>
               <div>
-                <button className="btn btn-primary" onClick={handleLegalRepresentation}> Save</button>
+                {/* <button className="btn btn-primary" onClick={handleLegalRepresentation}> Save</button> */}
               </div>
               <div>
-                <button className="btn" onClick={handleNextBtn}>
+                <button className="btn" onClick={handleLegalRepresentation}>
                   <i
                     className="fa-solid fa-angles-right"
                     style={{ fontSize: "30px" }}
@@ -963,10 +961,10 @@ const AddNewCaseForm = () => {
                 </button>
               </div>
               <div>
-                <button className="btn btn-primary" onClick={handleChildProtectionMeasures}> Save</button>
+                {/* <button className="btn btn-primary" onClick={handleChildProtectionMeasures}> Save</button> */}
               </div>
               <div>
-                <button className="btn" onClick={handleNextBtn}>
+                <button className="btn" onClick={handleChildProtectionMeasures}>
                   <i
                     className="fa-solid fa-angles-right"
                     style={{ fontSize: "30px" }}
@@ -1078,10 +1076,10 @@ const AddNewCaseForm = () => {
                 </button>
               </div>
               <div>
-                <button className="btn btn-primary" onClick={handleEvidence}> Save</button>
+                {/* <button className="btn btn-primary" onClick={handleEvidence}> Save</button> */}
               </div>
               <div>
-                <button className="btn" onClick={handleNextBtn}>
+                <button className="btn" onClick={handleEvidence}>
                   <i
                     className="fa-solid fa-angles-right"
                     style={{ fontSize: "30px" }}
@@ -1183,10 +1181,10 @@ const AddNewCaseForm = () => {
                 </button>
               </div>
               <div>
-                <button className="btn btn-primary" onClick={handleCaseManagement}> Save</button>
+                {/* <button className="btn btn-primary" onClick={handleCaseManagement}> Save</button> */}
               </div>
               <div>
-                <button className="btn" onClick={handleNextBtn}>
+                <button className="btn" onClick={handleCaseManagement}>
                   <i
                     className="fa-solid fa-angles-right"
                     style={{ fontSize: "30px" }}
@@ -1242,10 +1240,10 @@ const AddNewCaseForm = () => {
                 </button>
               </div>
               <div>
-                <button className="btn btn-primary" onClick={handlecourtOrdersAndJudgements}> Save</button>
+                {/* <button className="btn btn-primary" onClick={handlecourtOrdersAndJudgements}> Save</button> */}
               </div>
               <div>
-                <button className="btn" onClick={handleNextBtn}>
+                <button className="btn" onClick={handlecourtOrdersAndJudgements}>
                   <i
                     className="fa-solid fa-angles-right"
                     style={{ fontSize: "30px" }}
