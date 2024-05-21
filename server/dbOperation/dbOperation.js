@@ -13,6 +13,145 @@ const sqlRequest = async () => {
   });
 };
 //Case Details Update
+export const dbUpdatePdf = (id, pdfIdsMap, pdfs) => {
+  let query = "update DocumentStorageLink set ";
+  for (let i = 0; i < pdfs.length - 1; i++) {
+    query = query + pdfs[i] + "=" + `'${pdfIdsMap.get(pdfs[i])}',`;
+  }
+  query =
+    query +
+    pdfs[pdfs.length - 1] +
+    "=" +
+    `'${pdfIdsMap.get(pdfs[pdfs.length - 1])}'`;
+  query = query + ` where caseId = '${id}';`;
+  return new Promise(async (resolve, reject) => {
+    sqlRequest()
+      .then((request) => {
+        request.query(query, (error) => {
+          if (error) {
+            console.error("Error Data", error);
+            reject("Db Query Error");
+          } else {
+            resolve("Pdf Updated!");
+          }
+        });
+      })
+      .catch((error) => {
+        console.error("Function Location (dbUpdatePdf)", error);
+        reject("Server Error");
+      });
+  });
+};
+export const dbUpdatefollowUpInfo = (id, data) => {
+  return new Promise(async (resolve, reject) => {
+    sqlRequest()
+      .then((request) => {
+        request.query(
+          `update CaseDetails set 
+          postCaseMonitoringInput ='${data.postCaseMonitoringInput}',
+          followUpActionInput ='${data.followUpActionInput}'
+          where caseId = '${id}' `,
+          (error) => {
+            if (error) {
+              console.error("Error Data", error);
+              reject("Db Query Error");
+            } else {
+              resolve("Follow Up Info Updated!");
+            }
+          }
+        );
+      })
+      .catch((error) => {
+        console.error("Function Location (dbUpdatefollowUpInfo)", error);
+        reject("Server Error");
+      });
+  });
+};
+export const dbUpdateCaseManagementInfo = (id, data) => {
+  return new Promise(async (resolve, reject) => {
+    sqlRequest()
+      .then((request) => {
+        request.query(
+          `update CaseDetails set 
+          caseTimeline ='${data.caseTimelineInput}',
+          nextHearingDate ='${data.nextHearingDateInput}',
+          nextStepsandAction='${data.nextStepsandActionInput}',
+          taskAssignment='${data.taskAssignmentInput}',
+          caseNotesandUpdatesInput='${data.caseNotesandUpdatesInput}'
+          where caseId = '${id}' `,
+          (error) => {
+            if (error) {
+              console.error("Error Data", error);
+              reject("Db Query Error");
+            } else {
+              resolve("Case Management Info Updated!");
+            }
+          }
+        );
+      })
+      .catch((error) => {
+        console.error("Function Location (dbUpdateCaseManagementInfo)", error);
+        reject("Server Error");
+      });
+  });
+};
+export const dbUpdateLegalRepInfo = (id, data) => {
+  return new Promise(async (resolve, reject) => {
+    sqlRequest()
+      .then((request) => {
+        request.query(
+          `update CaseDetails set 
+          lawyer ='${data.lawyerInput}',
+          petitioner ='${data.petitionerInput}',
+          respondent='${data.respondentInput}',
+          legalAidDetails='${data.legalAidDetailsInput}'
+          where caseId = '${id}' `,
+          (error) => {
+            if (error) {
+              console.error("Error Data", error);
+              reject("Db Query Error");
+            } else {
+              resolve("Legal Details Updated!");
+            }
+          }
+        );
+      })
+      .catch((error) => {
+        console.error("Function Location (dbUpdateLegalRepInfo)", error);
+        reject("Server Error");
+      });
+  });
+};
+export const dbUpdateCaseDetails = (id, data) => {
+  return new Promise(async (resolve, reject) => {
+    sqlRequest()
+      .then((request) => {
+        request.query(
+          `update CaseDetails set 
+          caseTitle ='${data.caseTitleInput}',
+          caseDescription ='${data.caseDescriptionInput}',
+          courtName='${data.courtNameInput}',
+          jurisdiction='${data.jurisdictionInput}',
+          caseType='${data.selectedCaseType}',
+          casePriority='${data.selectedCasePriority}',
+          caseStatus='${data.selectedCaseStatus}'
+          where caseId = '${id}' `,
+          (error) => {
+            if (error) {
+              console.error("Error Data", error);
+              reject("Db Query Error");
+            } else {
+              resolve("Case Details Updated!");
+            }
+          }
+        );
+      })
+      .catch((error) => {
+        console.error("Function Location (dbUpdateCaseDetails)", error);
+        reject("Server Error");
+      });
+  });
+};
 export const dbUpdateChildInfo = (id, data) => {
   return new Promise(async (resolve, reject) => {
     sqlRequest()

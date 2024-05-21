@@ -1,15 +1,26 @@
 import fs from "fs";
 import { v4 } from "uuid";
+import { dbUpdatePdf } from "../../dbOperation/dbOperation.js";
 const pdfs = ["protectionOrderPdf", "placementOrderPdf", "restrainingOrderPdf"];
 export const updateProtectionMeasuresPdf = (req, res) => {
   const pdfIdsMap = new Map();
-  try{
-    performPdfUpdateOperation(req, pdfs, pdfIdsMap);
-    res.status(200).json("updateProtectionMeasuresPdf");
-  }catch(err){
-    res.status(400).json("File Not Updated");
+  const { id } = req.params;
+  if (id) {
+    try {
+      performPdfUpdateOperation(req, pdfs, pdfIdsMap);
+      dbUpdatePdf(id, pdfIdsMap, pdfs)
+        .then((info) => {
+          res.status(200).json(info);
+        })
+        .catch((error) => {
+          res.status(400).json(error);
+        });
+    } catch (err) {
+      res.status(400).json("File Not Updated");
+    }
+  } else {
+    res.status(400).json("Please Provide Data");
   }
-  
 };
 export const performPdfUpdateOperation = (req, pdfs, pdfIdsMap) => {
   try {

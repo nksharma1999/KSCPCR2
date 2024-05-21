@@ -257,9 +257,9 @@ const CaseDetails = () => {
     if (placementOrderPdf) formData.append('placementOrderPdf', placementOrderPdf);
     if (restrainingOrderPdf) formData.append('restrainingOrderPdf', restrainingOrderPdf);
     const prevPdfId ={
-      protectionOrderPdf:'9dc91a28-5b7a-46a6-909e-a93cadd0d740',
+      protectionOrderPdf:'',
       placementOrderPdf:'',
-      restrainingOrderPdf:'9ab43b2c-8023-42c5-b878-2e7a5fb24168'
+      restrainingOrderPdf:''
     }
     formData.append('prevPdfId', JSON.stringify(prevPdfId));
     axios.put(IP.API +'case/protectionMeasures/'+ id, formData, {
