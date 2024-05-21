@@ -101,6 +101,34 @@ const CaseDetails = () => {
       console.log(err);
     })
   }
+  const validateChildInformation = () => {
+    const { childNameInput, ageInput, dobInput,guradianInput, educationalBgInput, addressInput} = childInformationInput;
+    if (
+      !childNameInput ||
+      !ageInput ||
+      !dobInput ||
+      !guradianInput ||
+      !educationalBgInput ||
+      !addressInput ||
+      selectedGender === "select" ||
+      selectedState === "select" ||
+      selectedCity === "select" ||
+      selectedTaluk === "select" ||
+      selectedVillage === "select" 
+     
+) {
+      alert("Please fill out all fields and select options in child information.");
+      return false;
+    }
+    return true;
+  };
+
+  const handleChildInformation = () => {
+    if (validateChildInformation()) {
+      alert("child information Saved!");
+      saveChildInformation();
+    }
+  };
   //Handle Page Number 2 Inputs
   const [caseDetailsInput,setCaseDetailsInput] = useState({
     caseIdInput:'',
@@ -128,7 +156,7 @@ const CaseDetails = () => {
   const handleCaseStatusChange =(e:any)=>{
     setSelectedCaseStatus(e.target.value);
   }
-  const handleCaseDetails =() =>{
+  const saveCaseDetails =() =>{
     // alert(caseIdInput.current?.value);
     // alert(selectedCaseStatus)
     const CaseDetailsData={
@@ -143,6 +171,30 @@ const CaseDetails = () => {
       console.log(err);
     })
   }
+  const validateCaseDetails = () => {
+    const { caseIdInput, caseTitleInput, caseDescriptionInput, courtNameInput, jurisdictionInput } = caseDetailsInput;
+    if (
+      !caseIdInput ||
+      !caseTitleInput ||
+      !caseDescriptionInput ||
+      !courtNameInput ||
+      !jurisdictionInput ||
+      selectedCaseType === "select" ||
+      selectedCasePriority === "select" ||
+      selectedCaseStatus === "select"
+    ) {
+      alert("Please fill out all fields and select options in Case Details.");
+      return false;
+    }
+    return true;
+  };
+
+  const handleCaseDetails = () => {
+    if (validateCaseDetails()) {
+      alert("Case Details Saved!");
+      saveCaseDetails();
+    }
+  };
   //Handle Page Number 3 Inputs
   const [legalRepresentationInput,setLegalRepresentationInput] = useState({
     lawyerInput:'',
@@ -157,7 +209,7 @@ const CaseDetails = () => {
       [name]: value
     }));
   }
-  const handleLegalRepresentation =() =>{
+  const saveLegalRepresentation =() =>{
     // alert(legalRepresentationInput.lawyerInput);
     axios.put(IP.API +'case/legal/'+id, legalRepresentationInput).then(res=>{
       console.log(res.data);
@@ -165,6 +217,21 @@ const CaseDetails = () => {
       console.log(err);
     })
   }
+  const validateLegalRepresentation = () => {
+    const { lawyerInput, petitionerInput, respondentInput, legalAidDetailsInput } = legalRepresentationInput;
+    if (!lawyerInput || !petitionerInput || !respondentInput || !legalAidDetailsInput) {
+      alert("Update the required fields in Legal Representation.");
+      return false;
+    }
+    return true;
+  };
+
+  const handleLegalRepresentation = () => {
+    if (validateLegalRepresentation()) {
+      alert("Legal Representation Saved!");
+      saveLegalRepresentation();
+    }
+  };
   //Handle Page Number 4 Inputs
   const [protectionOrderPdf, setProtectionOrderPdf] = useState<File | null>(null);
   const handleProtectioOrdersPdfChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -184,7 +251,7 @@ const CaseDetails = () => {
       setRestrainingOrderPdf(e.target.files[0]);
     }
   };
-  const handleChildProtectionMeasures=()=>{
+  const saveChildProtectionMeasures=()=>{
     const formData = new FormData();
     if (protectionOrderPdf) formData.append('protectionOrderPdf', protectionOrderPdf);
     if (placementOrderPdf) formData.append('placementOrderPdf', placementOrderPdf);
@@ -205,6 +272,20 @@ const CaseDetails = () => {
       console.log(err);
     })
   }
+  const validateChildProtectionMeasures = () => {
+    if (!protectionOrderPdf || !placementOrderPdf || !restrainingOrderPdf) {
+      alert("Please update all required PDFs in Child Protection Measures.");
+      return false;
+    }
+    return true;
+  };
+
+  const handleChildProtectionMeasures = () => {
+    if (validateChildProtectionMeasures()) {
+      alert("Child Protection Measures Saved!");
+      saveChildProtectionMeasures();
+    }
+  };
   //Handle Page Number 5 Inputs
   const [medicalReportsPdf, setMedicalReportsPdf] = useState<File | null>(null);
   const handleMedicalReportsPdfChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -242,7 +323,7 @@ const CaseDetails = () => {
       setSchoolRecordsPdf(e.target.files[0]);
     }
   };
-  const handleEvidence=() =>{
+  const saveEvidence=() =>{
     const formData = new FormData();
     if (medicalReportsPdf) formData.append('medicalReportsPdf', medicalReportsPdf);
     if (witnessStatementsPdf) formData.append('witnessStatementsPdf', witnessStatementsPdf);
@@ -269,6 +350,28 @@ const CaseDetails = () => {
       console.log(err);
     })
   }
+  const validateEvidence = () => {
+    if (
+      !medicalReportsPdf ||
+      !witnessStatementsPdf ||
+      !policeReportsPdf ||
+      !photographsPdf ||
+      !testimonyPdf ||
+      !schoolRecordsPdf
+    ) {
+      alert("Please update all required PDFs in Evidence and Documentation.");
+      return false;
+    }
+    return true;
+  };
+
+  const handleEvidence = () => {
+    if (validateEvidence()) {
+      alert("Evidence and Documentation Saved!");
+      saveEvidence();
+    }
+  };
+
   //Handle Page Number 6 Inputs
 
   const [caseManagementInput,setCaseManagementInput] = useState({
@@ -285,7 +388,7 @@ const CaseDetails = () => {
       [name]: value
     }));
   }
-  const handleCaseManagement=() =>{
+  const saveCaseManagement=() =>{
     // alert(caseManagementInput.caseNotesandUpdatesInput)
     axios.put(IP.API +'case/caseManagement/'+id, caseManagementInput).then(res=>{
       console.log(res.data);
@@ -293,6 +396,28 @@ const CaseDetails = () => {
       console.log(err);
     })
   }
+  const validatecaseManagement = () => {
+    const { caseTimelineInput, nextHearingDateInput, nextStepsandActionInput, taskAssignmentInput, caseNotesandUpdatesInput } = caseManagementInput;
+    if (
+      !caseTimelineInput ||
+      !nextHearingDateInput ||
+      !nextStepsandActionInput ||
+      !taskAssignmentInput ||
+      !caseNotesandUpdatesInput 
+    ) {
+      alert("Please fill out all fields and select options in Case Management.");
+      return false;
+    }
+    return true;
+  };
+
+  const handleCaseManagement = () => {
+    if (validatecaseManagement()) {
+      alert("Case Management Saved!");
+      saveCaseManagement();
+    }
+  };
+
   //Handle Page Number 7 Inputs
   const [courtOrdersPdf, setCourtOrdersPdf] = useState<File | null>(null);
   const handleCourtOrdersPdfChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -306,7 +431,7 @@ const CaseDetails = () => {
       setJudgementsPdf(e.target.files[0]);
     }
   };
-  const courtOrdersAndJudgements = ()=>{
+  const savecourtOrdersAndJudgements = ()=>{
     const formData = new FormData();
     if (courtOrdersPdf) formData.append('courtOrdersPdf', courtOrdersPdf);
     if (judgementsPdf) formData.append('judgementsPdf', judgementsPdf);
@@ -325,21 +450,68 @@ const CaseDetails = () => {
       console.log(err);
     })
   }
-  //Handle Page Number 8 Inputs
-  const postCaseMonitoringInput = useRef<HTMLInputElement>(null);
-  const followUpActionInput = useRef<HTMLInputElement>(null);
-  const handleMonitoring = () =>{
-    // alert(postCaseMonitoringInput.current?.value);
-    const data ={
-      postCaseMonitoringInput:postCaseMonitoringInput.current?.value,
-      followUpActionInput:followUpActionInput.current?.value
+  const validatecourtOrdersAndJudgements = () => {
+    if (!courtOrdersPdf || !judgementsPdf) {
+      alert("Please upload all required PDFs in Court Order and Judgements.");
+      return false;
     }
+    return true;
+  };
+
+  const handlecourtOrdersAndJudgements = () => {
+    if (validatecourtOrdersAndJudgements()) {
+      alert("Court Order and Judgements Saved!");
+      savecourtOrdersAndJudgements();
+    }
+  };
+  //Handle Page Number 8 Inputs
+  const [data,setdata] = useState({
+    postCaseMonitoringInput:'',
+    followUpActionInput:'',
+  })
+  const dataInputChange =(e:any)=>{
+    const { name, value } = e.target;
+    setdata(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
+  }
+  const savedata =() =>{
     axios.put(IP.API +'case/follow-up/'+id, data).then(res=>{
       console.log(res.data);
     }).catch(err=>{
       console.log(err);
     })
   }
+  const validatedata = () => {
+    const { postCaseMonitoringInput, followUpActionInput } = data;
+    if (!postCaseMonitoringInput || !followUpActionInput) {
+      alert("Update the required fields in Monitoring.");
+      return false;
+    }
+    return true;
+  };
+
+  const handledata = () => {
+    if (validatedata()) {
+      alert("Monitoring Saved!");
+      savedata();
+    }
+  };
+  // const postCaseMonitoringInput = useRef<HTMLInputElement>(null);
+  // const followUpActionInput = useRef<HTMLInputElement>(null);
+  // const handleMonitoring = () =>{
+  //   // alert(postCaseMonitoringInput.current?.value);
+  //   const data ={
+  //     postCaseMonitoringInput:postCaseMonitoringInput.current?.value,
+  //     followUpActionInput:followUpActionInput.current?.value
+  //   }
+  //   axios.put(IP.API +'case/follow-up/'+id, data).then(res=>{
+  //     console.log(res.data);
+  //   }).catch(err=>{
+  //     console.log(err);
+  //   })
+  // }
   const getCaseDetailsInfo =() =>{
     axios.get(IP.API+'case/'+id).then(res=>{
       const data:CaseDetailsMetaData = res.data[0];
@@ -569,7 +741,7 @@ const CaseDetails = () => {
             <div className="col-12">
               {editId === 1 && (
                 <div style={{display:'flex',justifyContent:'center'}}>
-                  <button onClick={saveChildInformation} className="btn btn-primary">Update</button>
+                  <button onClick={handleChildInformation} className="btn btn-primary">Update</button>
                 </div>
               )}
             </div>
@@ -1157,7 +1329,7 @@ const CaseDetails = () => {
             <div className="col-12">
               {editId === 7 && (
                 <div style={{display:'flex',justifyContent:'center'}}>
-                  <button onClick={courtOrdersAndJudgements} className="btn btn-primary">Update</button>
+                  <button onClick={handlecourtOrdersAndJudgements} className="btn btn-primary">Update</button>
                 </div>
               )}
             </div>
@@ -1188,8 +1360,10 @@ const CaseDetails = () => {
                   className="form-control"
                   id="floatingInput"
                   placeholder="name@example.com"
-                  value={"HKJHKJF"}
-                  ref={postCaseMonitoringInput}
+                  onChange={dataInputChange}
+                  // value={data.postCaseMonitoringInput}
+                  // value={"HKJHKJF"}
+                  // ref={postCaseMonitoringInput}
                   disabled={editId === 8 ? false : true}
                 />
                 <label htmlFor="floatingInput">Post case Monitoring</label>
@@ -1202,8 +1376,10 @@ const CaseDetails = () => {
                   className="form-control"
                   id="floatingInput2"
                   placeholder="name@example.com"
-                  value={"GGDKH"}
-                  ref={followUpActionInput}
+                  onChange={dataInputChange}
+                  // value={data.followUpActionInput}
+                  // value={"GGDKH"}
+                  // ref={followUpActionInput}
                   disabled={editId === 8 ? false : true}
                 />
                 <label htmlFor="floatingInput2">Follow-up Action </label>
@@ -1212,7 +1388,7 @@ const CaseDetails = () => {
             <div className="col-12">
               {editId === 8 && (
                 <div style={{display:'flex',justifyContent:'center'}}>
-                  <button onClick={handleMonitoring} className="btn btn-primary">Update</button>
+                  <button onClick={handledata} className="btn btn-primary">Update</button>
                 </div>
               )}
             </div>
