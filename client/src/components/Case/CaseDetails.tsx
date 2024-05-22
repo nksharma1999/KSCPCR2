@@ -50,12 +50,12 @@ const CaseDetails = () => {
   };
   //Handle Page Number 1 Inputs
   const [childInformationInput,setChildInformationInput] = useState({
-    childNameInput:'',
+    childNameInput:'fdfghthe11',
     ageInput:'',
     dobInput:'',
     guradianInput:'',
     educationalBgInput:'',
-    addressInput:'',
+    addressInput:'Solagidih chas bokaro',
   })
   const childInformationInputChange =(e:any)=>{
     const { name, value } = e.target;
@@ -131,8 +131,8 @@ const CaseDetails = () => {
   };
   //Handle Page Number 2 Inputs
   const [caseDetailsInput,setCaseDetailsInput] = useState({
-    caseIdInput:'',
-    caseTitleInput:'',
+    caseIdInput:'we34t',
+    caseTitleInput:'ererer',
     caseDescriptionInput:'',
     courtNameInput:'',
     jurisdictionInput:'',
@@ -144,7 +144,7 @@ const CaseDetails = () => {
       [name]: value
     }));
   }
-  const [selectedCaseType,setSelectedCaseType] = useState<string>('select');
+  const [selectedCaseType,setSelectedCaseType] = useState<string>('child Labour');
   const handleCaseTypeChange =(e:any)=>{
     setSelectedCaseType(e.target.value);
   }
@@ -152,7 +152,7 @@ const CaseDetails = () => {
   const handleCasePriorityChange =(e:any)=>{
     setSelectedCasePriority(e.target.value);
   }
-  const [selectedCaseStatus,setSelectedCaseStatus] = useState<string>('select');
+  const [selectedCaseStatus,setSelectedCaseStatus] = useState<string>('closed');
   const handleCaseStatusChange =(e:any)=>{
     setSelectedCaseStatus(e.target.value);
   }
