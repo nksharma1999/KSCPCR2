@@ -12,6 +12,51 @@ const sqlRequest = async () => {
     }
   });
 };
+//Filter Master Info
+export const dbGetFilterCityList = (districtId) => {
+  return new Promise(async (resolve, reject) => {
+    sqlRequest()
+      .then((request) => {
+        request.query(
+          `SELECT City,CityId from City where DistrictId = ${districtId};`,
+          (error, result) => {
+            if (error) {
+              console.error(error);
+              reject("Db Query Error");
+            } else {
+              resolve(result);
+            }
+          }
+        );
+      })
+      .catch((error) => {
+        console.error("Function Location (dbGetFilterCityList)", error);
+        reject("Server Error");
+      });
+  });
+};
+export const dbGetFilterDistrictList = (stateId) => {
+  return new Promise(async (resolve, reject) => {
+    sqlRequest()
+      .then((request) => {
+        request.query(
+          `SELECT DistrictId,District from District where StateId = ${stateId};`,
+          (error, result) => {
+            if (error) {
+              console.error(error);
+              reject("Db Query Error");
+            } else {
+              resolve(result);
+            }
+          }
+        );
+      })
+      .catch((error) => {
+        console.error("Function Location (dbGetFilterDistrictList)", error);
+        reject("Server Error");
+      });
+  });
+};
 //Case Details Update
 export const dbUpdatePdf = (id, pdfIdsMap, pdfs) => {
   let query = "update DocumentStorageLink set ";

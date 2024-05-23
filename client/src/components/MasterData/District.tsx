@@ -1,32 +1,88 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AddState } from "./DataEntry/AddState";
 import { AddDistrict } from "./DataEntry/AddDistrict";
-const data = [
-  {
-    DistrictId: 232,
-    DistrictName: "Belagavi",
-  }
-];
+import axios from "axios";
+import { IP } from "../utils/IP";
+import { EditInfo, EditinfoInterface } from "./DataEntry/EditInfo";
 
+export interface DistrictInterface {
+  StateId: number;
+  District: string;
+  DistrictId: number;
+}
 const District = () => {
-  const [DistrictList, setDistrictList] = useState(data);
+  const [DistrictList, setDistrictList] = useState<DistrictInterface[]>([]);
   const [isNewDistrict, setNewDistrict] = useState<boolean>(false);
   const [showEditPage, setShowEditPage] = useState<boolean>(false);
-  const [editInfo, setEditInfo] = useState(null);
+  const [editInfo, setEditInfo] = useState<EditinfoInterface>({
+    id: 0,
+    name: "",
+  });
   const showAddNewDataEntryView = () => {
     setNewDistrict(true);
   };
   const closeNewRolePage = () => {
     setNewDistrict(false);
   };
-  const handleEdit = (info: any) => {
-    setEditInfo(info);
+  const handleEdit = (info: DistrictInterface) => {
+    setEditInfo({ id: info.DistrictId, name: info.District });
     setShowEditPage(true);
   };
   const closeEditPage = () => {
-    setEditInfo(null);
+    setEditInfo({
+      id: 0,
+      name: "",
+    });
     setShowEditPage(false);
   };
+  const handleDeleteState = (info: DistrictInterface) => {
+    const userConfirmed = window.confirm(
+      "Are you sure you want to delete this District? \n" +
+        "Name: " +
+        info.District
+    );
+
+    if (userConfirmed) {
+      axios
+        .delete(IP.API + "district/" + info.DistrictId)
+        .then((res) => {
+          console.log(res.data);
+          getDistrictList();
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  };
+  const updateInfo = (info: EditinfoInterface) => {
+    const body = {
+      districtName: info.name,
+    };
+    axios
+      .put(IP.API + "district/" + info.id, body)
+      .then((res) => {
+        console.log(res.data);
+        closeEditPage();
+        getDistrictList();
+      })
+      .catch((error) => {
+        console.error(error);
+        closeEditPage();
+      });
+  };
+  const getDistrictList = () => {
+    axios
+      .get(IP.API + "district")
+      .then((res) => {
+        setDistrictList(res.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+  useEffect(() => {
+    getDistrictList();
+  }, []);
   return (
     <>
       <div>
@@ -82,7 +138,7 @@ const District = () => {
                   return (
                     <tr key={index} className="tableFirstThStyle">
                       <th scope="row">{index + 1}</th>
-                      <td>{val.DistrictName}</td>
+                      <td>{val.District}</td>
 
                       <td
                         style={{
@@ -103,7 +159,8 @@ const District = () => {
                           <i className="fa-solid fa-pen-to-square"></i>
                         </button>
                         <button
-                        className="btn"
+                          onClick={() => handleDeleteState(val)}
+                          className="btn"
                           style={{
                             backgroundColor: "white",
                             border: "none",
@@ -122,7 +179,14 @@ const District = () => {
         </div>
       </div>
       {isNewDistrict && <AddDistrict closeAddComponent={closeNewRolePage} />}
-      {/* {showEditPage && <EditDistrict closeAddComponent={closeEditPage} info={editInfo} />} */}
+      {showEditPage && (
+        <EditInfo
+          closeEditCmp={closeEditPage}
+          title="District"
+          info={editInfo}
+          updateInfo={updateInfo}
+        />
+      )}
     </>
   );
 };

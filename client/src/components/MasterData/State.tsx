@@ -1,31 +1,85 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AddState } from "./DataEntry/AddState";
-const data = [
-  {
-    StateId: 232,
-    StateName: "karnataka",
-  }
-];
+import axios from "axios";
+import { IP } from "../utils/IP";
+import { EditInfo, EditinfoInterface } from "./DataEntry/EditInfo";
+
+export interface StateInterface {
+  StateId: number;
+  State: string;
+}
 
 const State = () => {
-  const [StateList, setStateList] = useState(data);
+  const [StateList, setStateList] = useState<StateInterface[]>([]);
   const [isNewState, setNewState] = useState<boolean>(false);
   const [showEditPage, setShowEditPage] = useState<boolean>(false);
-  const [editInfo, setEditInfo] = useState(null);
+  const [editInfo, setEditInfo] = useState<EditinfoInterface>({
+    id: 0,
+    name: "",
+  });
   const showAddNewDataEntryView = () => {
     setNewState(true);
   };
   const closeNewRolePage = () => {
     setNewState(false);
   };
-  const handleEdit = (info: any) => {
-    setEditInfo(info);
+  const handleEdit = (info: StateInterface) => {
+    setEditInfo({
+      id: info.StateId,
+      name: info.State,
+    });
     setShowEditPage(true);
   };
   const closeEditPage = () => {
-    setEditInfo(null);
+    setEditInfo({ id: 0, name: "" });
     setShowEditPage(false);
   };
+  const updateInfo = (info: EditinfoInterface) => {
+    const body = {
+      stateName: info.name,
+    };
+    axios
+      .put(IP.API + "state/" + info.id, body)
+      .then((res) => {
+        console.log(res.data);
+        closeEditPage();
+        getStateList();
+      })
+      .catch((error) => {
+        console.error(error);
+        closeEditPage();
+      });
+  };
+  const getStateList = () => {
+    axios
+      .get(IP.API + "state")
+      .then((data) => {
+        setStateList(data.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+  const handleDeleteState = (info: StateInterface) => {
+    const userConfirmed = window.confirm(
+      "Are you sure you want to delete this State? \n" + "Name: " + info.State
+    );
+
+    if (userConfirmed) {
+      axios
+        .delete(IP.API + "state/" + info.StateId)
+        .then((res) => {
+          console.log(res.data);
+          getStateList();
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  };
+  useEffect(() => {
+    getStateList();
+  }, []);
   return (
     <>
       <div>
@@ -81,7 +135,7 @@ const State = () => {
                   return (
                     <tr key={index} className="tableFirstThStyle">
                       <th scope="row">{index + 1}</th>
-                      <td>{val.StateName}</td>
+                      <td>{val.State}</td>
 
                       <td
                         style={{
@@ -102,7 +156,8 @@ const State = () => {
                           <i className="fa-solid fa-pen-to-square"></i>
                         </button>
                         <button
-                        className="btn"
+                          onClick={() => handleDeleteState(val)}
+                          className="btn"
                           style={{
                             backgroundColor: "white",
                             border: "none",
@@ -121,7 +176,14 @@ const State = () => {
         </div>
       </div>
       {isNewState && <AddState closeAddComponent={closeNewRolePage} />}
-      {/* {showEditPage && <EditState closeAddComponent={closeEditPage} info={editInfo} />} */}
+      {showEditPage && (
+        <EditInfo
+          closeEditCmp={closeEditPage}
+          title="State"
+          info={editInfo}
+          updateInfo={updateInfo}
+        />
+      )}
     </>
   );
 };

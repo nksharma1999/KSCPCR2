@@ -1,32 +1,89 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AddState } from "./DataEntry/AddState";
 import { AddCity } from "./DataEntry/AddCity";
-const data = [
-  {
-    CityId: 232,
-    CityName: "Bagalkot",
-  }
-];
+import axios from "axios";
+import { IP } from "../utils/IP";
+import { EditInfo, EditinfoInterface } from "./DataEntry/EditInfo";
+
+interface CityInterface {
+  CityId: number;
+  City: string;
+}
 
 const City = () => {
-  const [CityList, setCityList] = useState(data);
+  const [CityList, setCityList] = useState<CityInterface[]>([]);
   const [isNewCity, setNewCity] = useState<boolean>(false);
   const [showEditPage, setShowEditPage] = useState<boolean>(false);
-  const [editInfo, setEditInfo] = useState(null);
+  const [editInfo, setEditInfo] = useState<EditinfoInterface>({
+    id: 0,
+    name: "",
+  });
   const showAddNewDataEntryView = () => {
     setNewCity(true);
   };
   const closeNewRolePage = () => {
     setNewCity(false);
   };
-  const handleEdit = (info: any) => {
-    setEditInfo(info);
+  const handleEdit = (info: CityInterface) => {
+    setEditInfo({
+      id: info.CityId,
+      name: info.City,
+    });
     setShowEditPage(true);
   };
   const closeEditPage = () => {
-    setEditInfo(null);
+    setEditInfo({
+      id: 0,
+      name: "",
+    });
     setShowEditPage(false);
   };
+  const handleDeleteState = (info: CityInterface) => {
+    const userConfirmed = window.confirm(
+      "Are you sure you want to delete this City? \n" + "Name: " + info.City
+    );
+
+    if (userConfirmed) {
+      axios
+        .delete(IP.API + "city/" + info.CityId)
+        .then((res) => {
+          console.log(res.data);
+          getCityList();
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  };
+  const updateInfo = (info: EditinfoInterface) => {
+    const body = {
+      cityName: info.name,
+    };
+    axios
+      .put(IP.API + "city/" + info.id, body)
+      .then((res) => {
+        console.log(res.data);
+        closeEditPage();
+        getCityList();
+      })
+      .catch((error) => {
+        console.error(error);
+        closeEditPage();
+      });
+  };
+  const getCityList = () => {
+    axios
+      .get(IP.API + "city")
+      .then((res) => {
+        setCityList(res.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+  useEffect(() => {
+    getCityList();
+  }, []);
   return (
     <>
       <div>
@@ -82,7 +139,7 @@ const City = () => {
                   return (
                     <tr key={index} className="tableFirstThStyle">
                       <th scope="row">{index + 1}</th>
-                      <td>{val.CityName}</td>
+                      <td>{val.City}</td>
 
                       <td
                         style={{
@@ -103,7 +160,10 @@ const City = () => {
                           <i className="fa-solid fa-pen-to-square"></i>
                         </button>
                         <button
-                        className="btn"
+                          onClick={() => {
+                            handleDeleteState(val);
+                          }}
+                          className="btn"
                           style={{
                             backgroundColor: "white",
                             border: "none",
@@ -122,7 +182,14 @@ const City = () => {
         </div>
       </div>
       {isNewCity && <AddCity closeAddComponent={closeNewRolePage} />}
-      {/* {showEditPage && <EditCity closeAddComponent={closeEditPage} info={editInfo} />} */}
+      {showEditPage && (
+        <EditInfo
+          closeEditCmp={closeEditPage}
+          title="City"
+          info={editInfo}
+          updateInfo={updateInfo}
+        />
+      )}
     </>
   );
 };

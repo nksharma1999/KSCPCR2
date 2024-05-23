@@ -1,30 +1,51 @@
 import axios from "axios";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { IP } from "../../utils/IP";
+import { StateInterface } from "../State";
 
 interface props {
   closeAddComponent: () => void;
 }
 
 export const AddDistrict: React.FC<props> = ({ closeAddComponent }) => {
+  const [StateList, setStateList] = useState<StateInterface[]>([]);
   const districtNameInput = useRef<HTMLInputElement>(null);
-  const [selectedState,setSelectedState] = useState<string>('select');
-  const handleStateChange =(e:any)=>{
+  const [selectedState, setSelectedState] = useState<string>("select");
+  const handleStateChange = (e: any) => {
     setSelectedState(e.target.value);
-  }
-  const handleAddBtn =() =>{
-    const body={
-      districtName: districtNameInput.current?.value,
-      selectedState:selectedState
+  };
+  const handleAddBtn = () => {
+    if (districtNameInput.current?.value === "" || selectedState === "select") {
+      return;
     }
-    axios.post(IP.API +'addNewDistrict', body).then(res=>{
-      console.log(res.data);
-      closeAddComponent();
-    }).catch(err=>{
-      console.log(err);
-      closeAddComponent();
-    })
-  }
+    const body = {
+      districtName: districtNameInput.current?.value,
+      selectedState: selectedState,
+    };
+    axios
+      .post(IP.API + "addNewDistrict", body)
+      .then((res) => {
+        console.log(res.data);
+        closeAddComponent();
+      })
+      .catch((err) => {
+        console.log(err);
+        closeAddComponent();
+      });
+  };
+  const getStateList = () => {
+    axios
+      .get(IP.API + "state")
+      .then((data) => {
+        setStateList(data.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+  useEffect(() => {
+    getStateList();
+  }, []);
   return (
     <div className="popup">
       <div
@@ -68,7 +89,13 @@ export const AddDistrict: React.FC<props> = ({ closeAddComponent }) => {
                     value={selectedState}
                   >
                     <option value="select">---Select State---</option>
-                    <option value="karnataka">karnataka</option>
+                    {StateList.map((val, index) => {
+                      return (
+                        <option key={index} value={val.StateId}>
+                          {val.State}
+                        </option>
+                      );
+                    })}
                   </select>
                   <label htmlFor="floatingSelectGrid2">State</label>
                 </div>
@@ -101,7 +128,10 @@ export const AddDistrict: React.FC<props> = ({ closeAddComponent }) => {
                 </button>
               </div>
               <div className="col-lg-6 col-md-6 col-12">
-                <button onClick={handleAddBtn} style={{ width: "100%", backgroundColor: "#0A6862" }}>
+                <button
+                  onClick={handleAddBtn}
+                  style={{ width: "100%", backgroundColor: "#0A6862" }}
+                >
                   ADD
                 </button>
               </div>

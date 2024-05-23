@@ -1361,6 +1361,7 @@ const CaseDetails = () => {
                   id="floatingInput"
                   placeholder="name@example.com"
                   onChange={dataInputChange}
+                  name="postCaseMonitoringInput"
                   // value={data.postCaseMonitoringInput}
                   // value={"HKJHKJF"}
                   // ref={postCaseMonitoringInput}
@@ -1377,6 +1378,7 @@ const CaseDetails = () => {
                   id="floatingInput2"
                   placeholder="name@example.com"
                   onChange={dataInputChange}
+                  name="followUpActionInput"
                   // value={data.followUpActionInput}
                   // value={"GGDKH"}
                   // ref={followUpActionInput}

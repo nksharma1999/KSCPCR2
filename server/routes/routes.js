@@ -19,6 +19,7 @@ import {updateCaseManagementInfo} from '../controller/caseInfoUpdate/updateCaseM
 import {updatefollowUpInfo} from '../controller/caseInfoUpdate/updatefollowUpInfo.js';
 import {getCaseList} from '../controller/Dashboard/getCaselist.js';
 import {getCaseDetails} from '../controller/Dashboard/getCaseDetails.js';
+import {getFilterDistrictList,getFilterCityList} from '../controller/masterData/address/filteredInfo.js';
 const userRoutes = express.Router();
 const fileUpload = multer({ dest: "uploads/" });
 //Case Info
@@ -69,4 +70,7 @@ userRoutes.get("/Jurisdiction",getJurisdictionList);
 userRoutes.post("/Jurisdiction",addNewJurisdiction);
 userRoutes.put("/Jurisdiction/:id",updateJurisdiction);
 userRoutes.delete("/Jurisdiction/:id",removeJurisdiction);
+//Filter Master Info
+userRoutes.get("/district/filter/:stateId",getFilterDistrictList)
+userRoutes.get("/city/filter/:districtId",getFilterCityList)
 export default userRoutes;

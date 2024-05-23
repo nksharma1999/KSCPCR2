@@ -6,7 +6,6 @@ import {
   } from "../../../dbOperation/dbOperation.js";
 
 export const addNewCity = (req, res) => {
-  console.log(req.body);
   const { cityName, selectedDistrict } = req.body;
   if (cityName && selectedDistrict) {
     dbAddCity(selectedDistrict, cityName)

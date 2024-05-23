@@ -1,31 +1,88 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AddTaluk } from "./DataEntry/AddTaluk";
-const data = [
-  {
-    TalukId: 232,
-    TalukName: "Badami",
-  }
-];
+import axios from "axios";
+import { IP } from "../utils/IP";
+import { EditInfo, EditinfoInterface } from "./DataEntry/EditInfo";
+
+export interface TalukInterface {
+  TalukId: number;
+  Taluk: string;
+}
 
 const Taluk = () => {
-  const [TalukList, setTalukList] = useState(data);
+  const [TalukList, setTalukList] = useState<TalukInterface[]>([]);
   const [isNewTaluk, setNewTaluk] = useState<boolean>(false);
   const [showEditPage, setShowEditPage] = useState<boolean>(false);
-  const [editInfo, setEditInfo] = useState(null);
+  const [editInfo, setEditInfo] = useState<EditinfoInterface>({
+    id: 0,
+    name: "",
+  });
   const showAddNewDataEntryView = () => {
     setNewTaluk(true);
   };
   const closeNewRolePage = () => {
     setNewTaluk(false);
   };
-  const handleEdit = (info: any) => {
-    setEditInfo(info);
+  const handleEdit = (info: TalukInterface) => {
+    setEditInfo({
+      id: info.TalukId,
+      name: info.Taluk,
+    });
     setShowEditPage(true);
   };
   const closeEditPage = () => {
-    setEditInfo(null);
+    setEditInfo({
+      id: 0,
+      name: "",
+    });
     setShowEditPage(false);
   };
+  const handleDeleteState = (info: TalukInterface) => {
+    const userConfirmed = window.confirm(
+      "Are you sure you want to delete this Taluk? \n" + "Name: " + info.Taluk
+    );
+
+    if (userConfirmed) {
+      axios
+        .delete(IP.API + "taluk/" + info.TalukId)
+        .then((res) => {
+          console.log(res.data);
+          getTalukList();
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  };
+  const updateInfo = (info: EditinfoInterface) => {
+    const body = {
+      talukName: info.name,
+    };
+    axios
+      .put(IP.API + "taluk/" + info.id, body)
+      .then((res) => {
+        console.log(res.data);
+        closeEditPage();
+        getTalukList();
+      })
+      .catch((error) => {
+        console.error(error);
+        closeEditPage();
+      });
+  };
+  const getTalukList = () => {
+    axios
+      .get(IP.API + "taluk")
+      .then((res) => {
+        setTalukList(res.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+  useEffect(() => {
+    getTalukList();
+  }, []);
   return (
     <>
       <div>
@@ -81,7 +138,7 @@ const Taluk = () => {
                   return (
                     <tr key={index} className="tableFirstThStyle">
                       <th scope="row">{index + 1}</th>
-                      <td>{val.TalukName}</td>
+                      <td>{val.Taluk}</td>
 
                       <td
                         style={{
@@ -102,7 +159,8 @@ const Taluk = () => {
                           <i className="fa-solid fa-pen-to-square"></i>
                         </button>
                         <button
-                        className="btn"
+                        onClick={()=> handleDeleteState(val)}
+                          className="btn"
                           style={{
                             backgroundColor: "white",
                             border: "none",
@@ -121,7 +179,14 @@ const Taluk = () => {
         </div>
       </div>
       {isNewTaluk && <AddTaluk closeAddComponent={closeNewRolePage} />}
-      {/* {showEditPage && <EditTaluk closeAddComponent={closeEditPage} info={editInfo} />} */}
+      {showEditPage && (
+        <EditInfo
+          closeEditCmp={closeEditPage}
+          title="Taluk"
+          info={editInfo}
+          updateInfo={updateInfo}
+        />
+      )}
     </>
   );
 };
