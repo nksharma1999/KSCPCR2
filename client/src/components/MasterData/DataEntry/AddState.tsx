@@ -12,6 +12,9 @@ export const AddState: React.FC<props> = ({
 }) => {
   const stateNameInput= useRef<HTMLInputElement>(null);
   const handleAddBtn =() =>{
+    if(stateNameInput.current?.value ===''){
+      return;
+    }
     const body={
       stateName: stateNameInput.current?.value,
     }

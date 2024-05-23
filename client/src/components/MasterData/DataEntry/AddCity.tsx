@@ -27,6 +27,9 @@ export const AddCity: React.FC<props> = ({ closeAddComponent }) => {
     setSelectedDistrict(e.target.value);
   }
   const handleAddBtn =() =>{
+    if(selectedState ==='select' || selectedDistrict ==='select'|| cityNameInput.current?.value ===''){
+      return ;
+    }
     const body={
       cityName: cityNameInput.current?.value,
       selectedState:selectedState,

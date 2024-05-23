@@ -13,6 +13,28 @@ const sqlRequest = async () => {
   });
 };
 //Filter Master Info
+export const dbGetFilterTalukList = (cityId) => {
+  return new Promise(async (resolve, reject) => {
+    sqlRequest()
+      .then((request) => {
+        request.query(
+          `SELECT Taluk,TalukId from Taluk where CityId = ${cityId};`,
+          (error, result) => {
+            if (error) {
+              console.error(error);
+              reject("Db Query Error");
+            } else {
+              resolve(result);
+            }
+          }
+        );
+      })
+      .catch((error) => {
+        console.error("Function Location (dbGetFilterTalukList)", error);
+        reject("Server Error");
+      });
+  });
+};
 export const dbGetFilterCityList = (districtId) => {
   return new Promise(async (resolve, reject) => {
     sqlRequest()

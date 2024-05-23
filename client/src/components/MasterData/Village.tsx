@@ -1,31 +1,89 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AddVillage } from "./DataEntry/AddVillage";
-const data = [
-  {
-    VillageId: 232,
-    VillageName: "Bandakeri",
-  }
-];
+import axios from "axios";
+import { IP } from "../utils/IP";
+import { EditInfo, EditinfoInterface } from "./DataEntry/EditInfo";
 
+export interface VillageInterface {
+  VillageId: number;
+  Village: string;
+}
 const Village = () => {
-  const [VillageList, setVillageList] = useState(data);
+  const [VillageList, setVillageList] = useState<VillageInterface[]>([]);
   const [isNewVillage, setNewVillage] = useState<boolean>(false);
   const [showEditPage, setShowEditPage] = useState<boolean>(false);
-  const [editInfo, setEditInfo] = useState(null);
+  const [editInfo, setEditInfo] = useState<EditinfoInterface>({
+    id: 0,
+    name: "",
+  });
   const showAddNewDataEntryView = () => {
     setNewVillage(true);
   };
   const closeNewRolePage = () => {
     setNewVillage(false);
   };
-  const handleEdit = (info: any) => {
-    setEditInfo(info);
+  const handleEdit = (info: VillageInterface) => {
+    setEditInfo({
+      id:info.VillageId,
+      name:info.Village
+    });
     setShowEditPage(true);
   };
   const closeEditPage = () => {
-    setEditInfo(null);
+    setEditInfo({
+      id: 0,
+      name: "",
+    });
     setShowEditPage(false);
   };
+  const handleDeleteState = (info: VillageInterface) => {
+    const userConfirmed = window.confirm(
+      "Are you sure you want to delete this Village? \n" +
+        "Name: " +
+        info.Village
+    );
+
+    if (userConfirmed) {
+      axios
+        .delete(IP.API + "village/" + info.VillageId)
+        .then((res) => {
+          console.log(res.data);
+          getVillageList();
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  };
+  const updateInfo = (info: EditinfoInterface) => {
+    const body = {
+      villageName: info.name,
+    };
+    axios
+      .put(IP.API + "village/" + info.id, body)
+      .then((res) => {
+        console.log(res.data);
+        closeEditPage();
+        getVillageList();
+      })
+      .catch((error) => {
+        console.error(error);
+        closeEditPage();
+      });
+  };
+  const getVillageList = () => {
+    axios
+      .get(IP.API + "village")
+      .then((res) => {
+        setVillageList(res.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+  useEffect(() => {
+    getVillageList();
+  }, []);
   return (
     <>
       <div>
@@ -81,7 +139,7 @@ const Village = () => {
                   return (
                     <tr key={index} className="tableFirstThStyle">
                       <th scope="row">{index + 1}</th>
-                      <td>{val.VillageName}</td>
+                      <td>{val.Village}</td>
 
                       <td
                         style={{
@@ -102,7 +160,8 @@ const Village = () => {
                           <i className="fa-solid fa-pen-to-square"></i>
                         </button>
                         <button
-                        className="btn"
+                        onClick={()=> handleDeleteState(val)}
+                          className="btn"
                           style={{
                             backgroundColor: "white",
                             border: "none",
@@ -121,7 +180,14 @@ const Village = () => {
         </div>
       </div>
       {isNewVillage && <AddVillage closeAddComponent={closeNewRolePage} />}
-      {/* {showEditPage && <EditVillage closeAddComponent={closeEditPage} info={editInfo} />} */}
+      {showEditPage && (
+        <EditInfo
+          closeEditCmp={closeEditPage}
+          title="Taluk"
+          info={editInfo}
+          updateInfo={updateInfo}
+        />
+      )}
     </>
   );
 };

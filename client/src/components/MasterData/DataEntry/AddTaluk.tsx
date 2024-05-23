@@ -22,37 +22,47 @@ export const AddTaluk: React.FC<props> = ({ closeAddComponent }) => {
   const [selectedState, setSelectedState] = useState<string>("select");
   const handleStateChange = (e: any) => {
     setSelectedState(e.target.value);
-    axios
-      .get(IP.API + "district/filter/" + e.target.value)
-      .then((res) => {
-        const data = res.data;
-        setSelectedDistrict("select");
-        setSelectedCity("select");
-        setDistrictList(data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    if (e.target.value !== "select") {
+      axios
+        .get(IP.API + "district/filter/" + e.target.value)
+        .then((res) => {
+          const data = res.data;
+          setSelectedDistrict("select");
+          setSelectedCity("select");
+          setDistrictList(data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
   };
   const [selectedDistrict, setSelectedDistrict] = useState<string>("select");
   const handleDistrictChange = (e: any) => {
     setSelectedDistrict(e.target.value);
-    axios
-      .get(IP.API + "city/filter/" + e.target.value)
-      .then((res) => {
-        const data = res.data;
-        setSelectedCity("select");
-        setCityList(data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    if (e.target.value !== "select") {
+      axios
+        .get(IP.API + "city/filter/" + e.target.value)
+        .then((res) => {
+          const data = res.data;
+          setSelectedCity("select");
+          setCityList(data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
   };
   const [selectedCity, setSelectedCity] = useState<string>("select");
   const handleCityChange = (e: any) => {
     setSelectedCity(e.target.value);
   };
   const handleAddBtn = () => {
+    if(selectedState ==='select' || selectedDistrict ==='select' || selectedCity==='select'){
+      return ;
+    }
+    if(talukNameInput.current?.value === ''){
+      return;
+    }
     const body = {
       talukName: talukNameInput.current?.value,
       selectedState: selectedState,
