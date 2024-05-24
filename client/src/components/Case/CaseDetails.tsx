@@ -51,10 +51,10 @@ const CaseDetails = () => {
   //Handle Page Number 1 Inputs
   const [childInformationInput,setChildInformationInput] = useState({
     childNameInput:'fdfghthe11',
-    ageInput:'',
+    ageInput:'8',
     dobInput:'',
-    guradianInput:'',
-    educationalBgInput:'',
+    guradianInput:'fghjk',
+    educationalBgInput:'cvnbmed',
     addressInput:'Solagidih chas bokaro',
   })
   const childInformationInputChange =(e:any)=>{
@@ -68,19 +68,19 @@ const CaseDetails = () => {
   const handleGenderChange =(e:any)=>{
     setSelectedGender(e.target.value);
   }
-  const [selectedState,setSelectedState] = useState<string>('select');
+  const [selectedState,setSelectedState] = useState<string>('karnataka');
   const handleStateChange =(e:any)=>{
     setSelectedState(e.target.value);
   }
-  const [selectedCity,setSelectedCity] = useState<string>('select');
+  const [selectedCity,setSelectedCity] = useState<string>('Bagalkot');
   const handleCityChange =(e:any)=>{
     setSelectedCity(e.target.value);
   }
-  const [selectedTaluk,setSelectedTaluk] = useState<string>('select');
+  const [selectedTaluk,setSelectedTaluk] = useState<string>('Badami');
   const handleTalukChange =(e:any)=>{
     setSelectedTaluk(e.target.value);
   }
-  const [selectedVillage,setSelectedVillage] = useState<string>('select');
+  const [selectedVillage,setSelectedVillage] = useState<string>('Bandakeri');
   const handleVillageChange =(e:any)=>{
     setSelectedVillage(e.target.value);
   }
@@ -133,9 +133,9 @@ const CaseDetails = () => {
   const [caseDetailsInput,setCaseDetailsInput] = useState({
     caseIdInput:'we34t',
     caseTitleInput:'ererer',
-    caseDescriptionInput:'',
-    courtNameInput:'',
-    jurisdictionInput:'',
+    caseDescriptionInput:'qsdfgy',
+    courtNameInput:'ngfdser',
+    jurisdictionInput:'utfefdb',
   })
   const caseDetailsInputChange =(e:any)=>{
     const { name, value } = e.target;
@@ -144,15 +144,15 @@ const CaseDetails = () => {
       [name]: value
     }));
   }
-  const [selectedCaseType,setSelectedCaseType] = useState<string>('child Labour');
+  const [selectedCaseType,setSelectedCaseType] = useState<string>('Child Labour');
   const handleCaseTypeChange =(e:any)=>{
     setSelectedCaseType(e.target.value);
   }
-  const [selectedCasePriority,setSelectedCasePriority] = useState<string>('select');
+  const [selectedCasePriority,setSelectedCasePriority] = useState<string>('Medium');
   const handleCasePriorityChange =(e:any)=>{
     setSelectedCasePriority(e.target.value);
   }
-  const [selectedCaseStatus,setSelectedCaseStatus] = useState<string>('closed');
+  const [selectedCaseStatus,setSelectedCaseStatus] = useState<string>('Open');
   const handleCaseStatusChange =(e:any)=>{
     setSelectedCaseStatus(e.target.value);
   }
@@ -197,10 +197,10 @@ const CaseDetails = () => {
   };
   //Handle Page Number 3 Inputs
   const [legalRepresentationInput,setLegalRepresentationInput] = useState({
-    lawyerInput:'',
-    petitionerInput:'',
-    respondentInput:'',
-    legalAidDetailsInput:'',
+    lawyerInput:'lkjhfds',
+    petitionerInput:'qwertg',
+    respondentInput:'cvbhfd',
+    legalAidDetailsInput:'xyz',
   })
   const LegalRepresentationInputChange =(e:any)=>{
     const { name, value } = e.target;
@@ -377,9 +377,9 @@ const CaseDetails = () => {
   const [caseManagementInput,setCaseManagementInput] = useState({
     caseTimelineInput:'',
     nextHearingDateInput:'',
-    nextStepsandActionInput:'',
-    taskAssignmentInput:'',
-    caseNotesandUpdatesInput:'',
+    nextStepsandActionInput:'derghjut',
+    taskAssignmentInput:'asvbhte',
+    caseNotesandUpdatesInput:'zxcvbn',
   })
   const CaseManagementInputChange =(e:any)=>{
     const { name, value } = e.target;
@@ -605,7 +605,7 @@ const CaseDetails = () => {
                   onChange={handleGenderChange}
                 >
                   <option value="select">--- Select Gender ---</option>
-                  <option value="male">
+                  <option value="male" selected>
                     Male
                   </option>
                   <option value="female">Female</option>
@@ -669,7 +669,7 @@ const CaseDetails = () => {
                     onChange={handleStateChange}
                 >
                   <option value="select">--- Select State ---</option>
-                  <option value="karnataka">
+                  <option value="karnataka" selected>
                     karnataka
                   </option>
                   <option value="2">Two</option>
