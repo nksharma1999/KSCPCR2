@@ -2,6 +2,7 @@
 import axios from "axios";
 import { useRef, useState } from "react";
 import { IP } from "../../utils/IP";
+import { getToken } from "../../utils/getToken";
 
 interface props {
   closeAddComponent: () => void;
@@ -18,7 +19,11 @@ export const AddState: React.FC<props> = ({
     const body={
       stateName: stateNameInput.current?.value,
     }
-    axios.post(IP.API +'addNewState', body).then(res=>{
+    axios.post(IP.API +'addNewState', body,{
+      headers: {
+        "x-access-token": getToken(),
+      },
+    }).then(res=>{
       console.log(res.data);
       closeAddComponent();
     }).catch(err=>{

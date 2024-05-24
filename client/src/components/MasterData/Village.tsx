@@ -3,6 +3,7 @@ import { AddVillage } from "./DataEntry/AddVillage";
 import axios from "axios";
 import { IP } from "../utils/IP";
 import { EditInfo, EditinfoInterface } from "./DataEntry/EditInfo";
+import { getToken } from "../utils/getToken";
 
 export interface VillageInterface {
   VillageId: number;
@@ -45,7 +46,11 @@ const Village = () => {
 
     if (userConfirmed) {
       axios
-        .delete(IP.API + "village/" + info.VillageId)
+        .delete(IP.API + "village/" + info.VillageId,{
+          headers: {
+            "x-access-token": getToken(),
+          },
+        })
         .then((res) => {
           console.log(res.data);
           getVillageList();
@@ -60,7 +65,11 @@ const Village = () => {
       villageName: info.name,
     };
     axios
-      .put(IP.API + "village/" + info.id, body)
+      .put(IP.API + "village/" + info.id, body,{
+        headers: {
+          "x-access-token": getToken(),
+        },
+      })
       .then((res) => {
         console.log(res.data);
         closeEditPage();
@@ -73,7 +82,11 @@ const Village = () => {
   };
   const getVillageList = () => {
     axios
-      .get(IP.API + "village")
+      .get(IP.API + "village",{
+        headers: {
+          "x-access-token": getToken(),
+        },
+      })
       .then((res) => {
         setVillageList(res.data);
       })

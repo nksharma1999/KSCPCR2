@@ -3,6 +3,7 @@ import { AddTaluk } from "./DataEntry/AddTaluk";
 import axios from "axios";
 import { IP } from "../utils/IP";
 import { EditInfo, EditinfoInterface } from "./DataEntry/EditInfo";
+import { getToken } from "../utils/getToken";
 
 export interface TalukInterface {
   TalukId: number;
@@ -44,7 +45,11 @@ const Taluk = () => {
 
     if (userConfirmed) {
       axios
-        .delete(IP.API + "taluk/" + info.TalukId)
+        .delete(IP.API + "taluk/" + info.TalukId,{
+          headers: {
+            "x-access-token": getToken(),
+          },
+        })
         .then((res) => {
           console.log(res.data);
           getTalukList();
@@ -59,7 +64,11 @@ const Taluk = () => {
       talukName: info.name,
     };
     axios
-      .put(IP.API + "taluk/" + info.id, body)
+      .put(IP.API + "taluk/" + info.id, body,{
+        headers: {
+          "x-access-token": getToken(),
+        },
+      })
       .then((res) => {
         console.log(res.data);
         closeEditPage();
@@ -72,7 +81,11 @@ const Taluk = () => {
   };
   const getTalukList = () => {
     axios
-      .get(IP.API + "taluk")
+      .get(IP.API + "taluk",{
+        headers: {
+          "x-access-token": getToken(),
+        },
+      })
       .then((res) => {
         setTalukList(res.data);
       })

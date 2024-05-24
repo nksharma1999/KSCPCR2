@@ -2,6 +2,7 @@ import axios from "axios";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { IP } from "../utils/IP";
+import { getToken } from "../utils/getToken";
 
 const AddNewCaseForm = () => {
   //Handle Page Number and next Page
@@ -32,48 +33,56 @@ const AddNewCaseForm = () => {
     }
   }, [id]);
   //Handle Page Number 1 Inputs
-  const [childInformationInput,setChildInformationInput] = useState({
-    childNameInput:'',
-    ageInput:'',
-    dobInput:'',
-    genderInput:'',
-    guradianInput:'',
-    educationalBgInput:'',
-    addressInput:'',
-  })
-  const childInformationInputChange =(e:any)=>{
+  const [childInformationInput, setChildInformationInput] = useState({
+    childNameInput: "",
+    ageInput: "",
+    dobInput: "",
+    genderInput: "",
+    guradianInput: "",
+    educationalBgInput: "",
+    addressInput: "",
+  });
+  const childInformationInputChange = (e: any) => {
     const { name, value } = e.target;
-    setChildInformationInput(prevState => ({
+    setChildInformationInput((prevState) => ({
       ...prevState,
-      [name]: value
+      [name]: value,
     }));
-  }
-  const [selectedGender,setSelectedGender] = useState<string>('select');
-  const handleGenderChange =(e:any)=>{
+  };
+  const [selectedGender, setSelectedGender] = useState<string>("select");
+  const handleGenderChange = (e: any) => {
     setSelectedGender(e.target.value);
-  }
-  const [selectedState,setSelectedState] = useState<string>('select');
-  const handleStateChange =(e:any)=>{
+  };
+  const [selectedState, setSelectedState] = useState<string>("select");
+  const handleStateChange = (e: any) => {
     setSelectedState(e.target.value);
-  }
-  const [selectedCity,setSelectedCity] = useState<string>('select');
-  const handleCityChange =(e:any)=>{
+  };
+  const [selectedCity, setSelectedCity] = useState<string>("select");
+  const handleCityChange = (e: any) => {
     setSelectedCity(e.target.value);
-  }
-  const [selectedTaluk,setSelectedTaluk] = useState<string>('select');
-  const handleTalukChange =(e:any)=>{
+  };
+  const [selectedTaluk, setSelectedTaluk] = useState<string>("select");
+  const handleTalukChange = (e: any) => {
     setSelectedTaluk(e.target.value);
-  }
-  const [selectedVillage,setSelectedVillage] = useState<string>('select');
-  const handleVillageChange =(e:any)=>{
+  };
+  const [selectedVillage, setSelectedVillage] = useState<string>("select");
+  const handleVillageChange = (e: any) => {
     setSelectedVillage(e.target.value);
-  }
-  const saveChildInformation=()=>{
+  };
+  const saveChildInformation = () => {
     // alert(addressInput.current?.value);
     // alert(selectedVillage)
-  }
+  };
   const validateChildInformation = () => {
-    const { childNameInput, ageInput, dobInput,genderInput, guradianInput, educationalBgInput, addressInput} = childInformationInput;
+    const {
+      childNameInput,
+      ageInput,
+      dobInput,
+      genderInput,
+      guradianInput,
+      educationalBgInput,
+      addressInput,
+    } = childInformationInput;
     if (
       !childNameInput ||
       !ageInput ||
@@ -85,10 +94,11 @@ const AddNewCaseForm = () => {
       selectedState === "select" ||
       selectedCity === "select" ||
       selectedTaluk === "select" ||
-      selectedVillage === "select" 
-     
-) {
-      alert("Please fill out all fields and select options in child information.");
+      selectedVillage === "select"
+    ) {
+      alert(
+        "Please fill out all fields and select options in child information."
+      );
       return false;
     }
     return true;
@@ -102,39 +112,47 @@ const AddNewCaseForm = () => {
   };
 
   //Handle Page Number 2 Inputs
-  const [caseDetailsInput,setCaseDetailsInput] = useState({
-    caseIdInput:'',
-    caseTitleInput:'',
-    caseDescriptionInput:'',
-    courtNameInput:'',
-    jurisdictionInput:'',
-  })
-  const caseDetailsInputChange =(e:any)=>{
+  const [caseDetailsInput, setCaseDetailsInput] = useState({
+    caseIdInput: "",
+    caseTitleInput: "",
+    caseDescriptionInput: "",
+    courtNameInput: "",
+    jurisdictionInput: "",
+  });
+  const caseDetailsInputChange = (e: any) => {
     const { name, value } = e.target;
-    setCaseDetailsInput(prevState => ({
+    setCaseDetailsInput((prevState) => ({
       ...prevState,
-      [name]: value
+      [name]: value,
     }));
-  }
-  const [selectedCaseType,setSelectedCaseType] = useState<string>('select');
-  const handleCaseTypeChange =(e:any)=>{
+  };
+  const [selectedCaseType, setSelectedCaseType] = useState<string>("select");
+  const handleCaseTypeChange = (e: any) => {
     setSelectedCaseType(e.target.value);
-  }
-  const [selectedCasePriority,setSelectedCasePriority] = useState<string>('select');
-  const handleCasePriorityChange =(e:any)=>{
+  };
+  const [selectedCasePriority, setSelectedCasePriority] =
+    useState<string>("select");
+  const handleCasePriorityChange = (e: any) => {
     setSelectedCasePriority(e.target.value);
-  }
-  const [selectedCaseStatus,setSelectedCaseStatus] = useState<string>('select');
-  const handleCaseStatusChange =(e:any)=>{
+  };
+  const [selectedCaseStatus, setSelectedCaseStatus] =
+    useState<string>("select");
+  const handleCaseStatusChange = (e: any) => {
     setSelectedCaseStatus(e.target.value);
-  }
+  };
   // const handleCaseDetails =() =>{
-    // alert(caseIdInput.current?.value);
+  // alert(caseIdInput.current?.value);
   //   alert(selectedCaseStatus)
   // }
 
   const validateCaseDetails = () => {
-    const { caseIdInput, caseTitleInput, caseDescriptionInput, courtNameInput, jurisdictionInput } = caseDetailsInput;
+    const {
+      caseIdInput,
+      caseTitleInput,
+      caseDescriptionInput,
+      courtNameInput,
+      jurisdictionInput,
+    } = caseDetailsInput;
     if (
       !caseIdInput ||
       !caseTitleInput ||
@@ -158,25 +176,35 @@ const AddNewCaseForm = () => {
     }
   };
   //Handle Page Number 3 Inputs
-  const [legalRepresentationInput,setLegalRepresentationInput] = useState({
-    lawyerInput:'',
-    petitionerInput:'',
-    respondentInput:'',
-    legalAidDetailsInput:'',
-  })
-  const LegalRepresentationInputChange =(e:any)=>{
+  const [legalRepresentationInput, setLegalRepresentationInput] = useState({
+    lawyerInput: "",
+    petitionerInput: "",
+    respondentInput: "",
+    legalAidDetailsInput: "",
+  });
+  const LegalRepresentationInputChange = (e: any) => {
     const { name, value } = e.target;
-    setLegalRepresentationInput(prevState => ({
+    setLegalRepresentationInput((prevState) => ({
       ...prevState,
-      [name]: value
+      [name]: value,
     }));
-  }
+  };
   // const handleLegalRepresentation =() =>{
-    // alert(petitionerInput.current?.value);
+  // alert(petitionerInput.current?.value);
   // }
   const validateLegalRepresentation = () => {
-    const { lawyerInput, petitionerInput, respondentInput, legalAidDetailsInput } = legalRepresentationInput;
-    if (!lawyerInput || !petitionerInput || !respondentInput || !legalAidDetailsInput) {
+    const {
+      lawyerInput,
+      petitionerInput,
+      respondentInput,
+      legalAidDetailsInput,
+    } = legalRepresentationInput;
+    if (
+      !lawyerInput ||
+      !petitionerInput ||
+      !respondentInput ||
+      !legalAidDetailsInput
+    ) {
       alert("Please fill out all fields in Legal Representation.");
       return false;
     }
@@ -190,7 +218,9 @@ const AddNewCaseForm = () => {
     }
   };
   //Handle Page Number 4 Inputs
-  const [protectionOrderPdf, setProtectionOrderPdf] = useState<File | null>(null);
+  const [protectionOrderPdf, setProtectionOrderPdf] = useState<File | null>(
+    null
+  );
   const handleProtectioOrdersPdfChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       setProtectionOrderPdf(e.target.files[0]);
@@ -202,8 +232,12 @@ const AddNewCaseForm = () => {
       setPlacementOrderPdf(e.target.files[0]);
     }
   };
-  const [restrainingOrderPdf, setRestrainingOrderPdf] = useState<File | null>(null);
-  const handleRestrainingOrdersPdfChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const [restrainingOrderPdf, setRestrainingOrderPdf] = useState<File | null>(
+    null
+  );
+  const handleRestrainingOrdersPdfChange = (
+    e: ChangeEvent<HTMLInputElement>
+  ) => {
     if (e.target.files && e.target.files.length > 0) {
       setRestrainingOrderPdf(e.target.files[0]);
     }
@@ -234,8 +268,12 @@ const AddNewCaseForm = () => {
       setMedicalReportsPdf(e.target.files[0]);
     }
   };
-  const [witnessStatementsPdf, setWitnessStatementsPdf] = useState<File | null>(null);
-  const handleWitnessStatementsPdfChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const [witnessStatementsPdf, setWitnessStatementsPdf] = useState<File | null>(
+    null
+  );
+  const handleWitnessStatementsPdfChange = (
+    e: ChangeEvent<HTMLInputElement>
+  ) => {
     if (e.target.files && e.target.files.length > 0) {
       setWitnessStatementsPdf(e.target.files[0]);
     }
@@ -296,33 +334,41 @@ const AddNewCaseForm = () => {
 
   //Handle Page Number 6 Inputs
 
-  const [caseManagementInput,setCaseManagementInput] = useState({
-    caseTimelineInput:'',
-    nextHearingDateInput:'',
-    nextStepsandActionInput:'',
-    taskAssignmentInput:'',
-    caseNotesandUpdatesInput:'',
-  })
-  const CaseManagementInputChange =(e:any)=>{
+  const [caseManagementInput, setCaseManagementInput] = useState({
+    caseTimelineInput: "",
+    nextHearingDateInput: "",
+    nextStepsandActionInput: "",
+    taskAssignmentInput: "",
+    caseNotesandUpdatesInput: "",
+  });
+  const CaseManagementInputChange = (e: any) => {
     const { name, value } = e.target;
-    setCaseManagementInput(prevState => ({
+    setCaseManagementInput((prevState) => ({
       ...prevState,
-      [name]: value
+      [name]: value,
     }));
-  }
+  };
   // const handleCaseManagement=() =>{
 
   // }
   const validatecaseManagement = () => {
-    const { caseTimelineInput, nextHearingDateInput, nextStepsandActionInput, taskAssignmentInput, caseNotesandUpdatesInput } = caseManagementInput;
+    const {
+      caseTimelineInput,
+      nextHearingDateInput,
+      nextStepsandActionInput,
+      taskAssignmentInput,
+      caseNotesandUpdatesInput,
+    } = caseManagementInput;
     if (
       !caseTimelineInput ||
       !nextHearingDateInput ||
       !nextStepsandActionInput ||
       !taskAssignmentInput ||
-      !caseNotesandUpdatesInput 
+      !caseNotesandUpdatesInput
     ) {
-      alert("Please fill out all fields and select options in Case Management.");
+      alert(
+        "Please fill out all fields and select options in Case Management."
+      );
       return false;
     }
     return true;
@@ -347,10 +393,10 @@ const AddNewCaseForm = () => {
       setJudgementsPdf(e.target.files[0]);
     }
   };
-  const courtOrdersAndJudgements = ()=>{
-    console.log(courtOrdersPdf)
-    console.log(judgementsPdf)
-  }
+  const courtOrdersAndJudgements = () => {
+    console.log(courtOrdersPdf);
+    console.log(judgementsPdf);
+  };
   const validatecourtOrdersAndJudgements = () => {
     if (!courtOrdersPdf || !judgementsPdf) {
       alert("Please upload all required PDFs in Court Order and Judgements.");
@@ -365,67 +411,81 @@ const AddNewCaseForm = () => {
       handleNextBtn();
     }
   };
-  
+
   //Handle Page Number 8 Inputs
   const postCaseMonitoringInput = useRef<HTMLInputElement>(null);
   const followUpActionInput = useRef<HTMLInputElement>(null);
-  
-  const handleSubmitBtn =() =>{
-    
+
+  const handleSubmitBtn = () => {
     const formData = new FormData();
-    
+
     //Page Number 1
-    const ChildInformationData ={
+    const ChildInformationData = {
       ...childInformationInput,
-      selectedGender:selectedGender,
-      selectedState:selectedState,
-      selectedCity:selectedCity,
-      selectedTaluk:selectedTaluk,
-      selectedVillage:selectedVillage,
-    }
-    formData.append('ChildInformation', JSON.stringify(ChildInformationData));
+      selectedGender: selectedGender,
+      selectedState: selectedState,
+      selectedCity: selectedCity,
+      selectedTaluk: selectedTaluk,
+      selectedVillage: selectedVillage,
+    };
+    formData.append("ChildInformation", JSON.stringify(ChildInformationData));
     //Page Number 2
-    const CaseDetailsData={
+    const CaseDetailsData = {
       ...caseDetailsInput,
-      selectedCaseType:selectedCaseType,
-      selectedCasePriority:selectedCasePriority,
-      selectedCaseStatus:selectedCaseStatus
-    }
-    formData.append('CaseDetails', JSON.stringify(CaseDetailsData));
+      selectedCaseType: selectedCaseType,
+      selectedCasePriority: selectedCasePriority,
+      selectedCaseStatus: selectedCaseStatus,
+    };
+    formData.append("CaseDetails", JSON.stringify(CaseDetailsData));
     //Page Number 3
-    formData.append('LegalRepresentation', JSON.stringify(legalRepresentationInput));
+    formData.append(
+      "LegalRepresentation",
+      JSON.stringify(legalRepresentationInput)
+    );
     //Page Number 4
-    if (protectionOrderPdf) formData.append('protectionOrderPdf', protectionOrderPdf);
-    if (placementOrderPdf) formData.append('placementOrderPdf', placementOrderPdf);
-    if (restrainingOrderPdf) formData.append('restrainingOrderPdf', restrainingOrderPdf);
+    if (protectionOrderPdf)
+      formData.append("protectionOrderPdf", protectionOrderPdf);
+    if (placementOrderPdf)
+      formData.append("placementOrderPdf", placementOrderPdf);
+    if (restrainingOrderPdf)
+      formData.append("restrainingOrderPdf", restrainingOrderPdf);
     //Page Number 5
-    if (medicalReportsPdf) formData.append('medicalReportsPdf', medicalReportsPdf);
-    if (witnessStatementsPdf) formData.append('witnessStatementsPdf', witnessStatementsPdf);
-    if (policeReportsPdf) formData.append('policeReportsPdf', policeReportsPdf);
-    if (photographsPdf) formData.append('photographsPdf', photographsPdf);
-    if (testimonyPdf) formData.append('testimonyPdf', testimonyPdf);
-    if (schoolRecordsPdf) formData.append('schoolRecordsPdf', schoolRecordsPdf);
+    if (medicalReportsPdf)
+      formData.append("medicalReportsPdf", medicalReportsPdf);
+    if (witnessStatementsPdf)
+      formData.append("witnessStatementsPdf", witnessStatementsPdf);
+    if (policeReportsPdf) formData.append("policeReportsPdf", policeReportsPdf);
+    if (photographsPdf) formData.append("photographsPdf", photographsPdf);
+    if (testimonyPdf) formData.append("testimonyPdf", testimonyPdf);
+    if (schoolRecordsPdf) formData.append("schoolRecordsPdf", schoolRecordsPdf);
     //Page Number 6
-    formData.append('CaseManagement', JSON.stringify(caseManagementInput));
+    formData.append("CaseManagement", JSON.stringify(caseManagementInput));
     //Page Number 7
-    if (courtOrdersPdf) formData.append('courtOrdersPdf', courtOrdersPdf);
-    if (judgementsPdf) formData.append('judgementsPdf', judgementsPdf);
+    if (courtOrdersPdf) formData.append("courtOrdersPdf", courtOrdersPdf);
+    if (judgementsPdf) formData.append("judgementsPdf", judgementsPdf);
     //Page Number 8
-    const MonitoringFollowUpData ={
-      postCaseMonitoringInput:postCaseMonitoringInput.current?.value,
-      followUpActionInput:followUpActionInput.current?.value,
-    }
-    formData.append('MonitoringFollowUp', JSON.stringify(MonitoringFollowUpData));
-    axios.post(IP.API +'addNewCase', formData, {
+    const MonitoringFollowUpData = {
+      postCaseMonitoringInput: postCaseMonitoringInput.current?.value,
+      followUpActionInput: followUpActionInput.current?.value,
+    };
+    formData.append(
+      "MonitoringFollowUp",
+      JSON.stringify(MonitoringFollowUpData)
+    );
+    axios
+      .post(IP.API + "addNewCase", formData, {
         headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      }).then(res=>{
-        console.log(res.data);
-      }).catch(err=>{
-        console.log(err);
+          "Content-Type": "multipart/form-data",
+          "x-access-token": getToken(),
+        },
       })
-  }
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <>
       <div
@@ -531,7 +591,7 @@ const AddNewCaseForm = () => {
                     className="form-control"
                     id="floatingInput6"
                     placeholder="name@example.com"
-                    name="educationalBgInput"                    
+                    name="educationalBgInput"
                     onChange={childInformationInputChange}
                     value={childInformationInput.educationalBgInput}
                   />
@@ -916,7 +976,10 @@ const AddNewCaseForm = () => {
                     accept="application/pdf"
                     onChange={handleProtectioOrdersPdfChange}
                   />
-                  <label htmlFor="floatingInput">Protection Orders: <strong>{protectionOrderPdf?.name}</strong></label>
+                  <label htmlFor="floatingInput">
+                    Protection Orders:{" "}
+                    <strong>{protectionOrderPdf?.name}</strong>
+                  </label>
                 </div>
               </div>
               <div className="col-lg-6 col-md-6 col-sm-12 col-12">
@@ -929,7 +992,9 @@ const AddNewCaseForm = () => {
                     accept="application/pdf"
                     onChange={handlePlacementOrdersPdfChange}
                   />
-                  <label htmlFor="floatingInput2">Placement Orders: <strong>{placementOrderPdf?.name}</strong> </label>
+                  <label htmlFor="floatingInput2">
+                    Placement Orders: <strong>{placementOrderPdf?.name}</strong>{" "}
+                  </label>
                 </div>
               </div>
               <div className="col-12">
@@ -942,7 +1007,10 @@ const AddNewCaseForm = () => {
                     accept="application/pdf"
                     onChange={handleRestrainingOrdersPdfChange}
                   />
-                  <label htmlFor="floatingInput3">Restraining Orders: <strong>{restrainingOrderPdf?.name}</strong></label>
+                  <label htmlFor="floatingInput3">
+                    Restraining Orders:{" "}
+                    <strong>{restrainingOrderPdf?.name}</strong>
+                  </label>
                 </div>
               </div>
             </div>
@@ -990,7 +1058,9 @@ const AddNewCaseForm = () => {
                     accept="application/pdf"
                     onChange={handleMedicalReportsPdfChange}
                   />
-                  <label htmlFor="floatingInput">Medical Reports: <strong>{medicalReportsPdf?.name}</strong></label>
+                  <label htmlFor="floatingInput">
+                    Medical Reports: <strong>{medicalReportsPdf?.name}</strong>
+                  </label>
                 </div>
               </div>
               <div className="col-lg-6 col-md-6 col-sm-12 col-12">
@@ -1003,7 +1073,10 @@ const AddNewCaseForm = () => {
                     accept="application/pdf"
                     onChange={handleWitnessStatementsPdfChange}
                   />
-                  <label htmlFor="floatingInput2">Witness Statements: <strong>{witnessStatementsPdf?.name}</strong></label>
+                  <label htmlFor="floatingInput2">
+                    Witness Statements:{" "}
+                    <strong>{witnessStatementsPdf?.name}</strong>
+                  </label>
                 </div>
               </div>
               <div className="col-lg-6 col-md-6 col-sm-12 col-12">
@@ -1016,7 +1089,9 @@ const AddNewCaseForm = () => {
                     accept="application/pdf"
                     onChange={handlePoliceReportsPdfChange}
                   />
-                  <label htmlFor="floatingInput42">Police Reports: <strong>{policeReportsPdf?.name}</strong></label>
+                  <label htmlFor="floatingInput42">
+                    Police Reports: <strong>{policeReportsPdf?.name}</strong>
+                  </label>
                 </div>
               </div>
               <div className="col-lg-6 col-md-6 col-sm-12 col-12">
@@ -1030,7 +1105,8 @@ const AddNewCaseForm = () => {
                     onChange={handlePhotographsPdfChange}
                   />
                   <label htmlFor="floatingInput3">
-                    Photographs or Evidence: <strong>{photographsPdf?.name}</strong>
+                    Photographs or Evidence:{" "}
+                    <strong>{photographsPdf?.name}</strong>
                   </label>
                 </div>
               </div>
@@ -1044,7 +1120,12 @@ const AddNewCaseForm = () => {
                     accept="application/pdf"
                     onChange={handleTestimonyPdfChange}
                   />
-                  <label htmlFor="floatingInput4"> Child's Testimony: <strong>{testimonyPdf?.name}</strong> </label>
+                  <label htmlFor="floatingInput4">
+                    {" "}
+                    Child's Testimony: <strong>
+                      {testimonyPdf?.name}
+                    </strong>{" "}
+                  </label>
                 </div>
               </div>
               <div className="col-lg-6 col-md-6 col-sm-12 col-12">
@@ -1057,7 +1138,12 @@ const AddNewCaseForm = () => {
                     accept="application/pdf"
                     onChange={handleSchoolRecordsPdfChange}
                   />
-                  <label htmlFor="floatingInput5"> School Records: <strong>{schoolRecordsPdf?.name}</strong> </label>
+                  <label htmlFor="floatingInput5">
+                    {" "}
+                    School Records: <strong>
+                      {schoolRecordsPdf?.name}
+                    </strong>{" "}
+                  </label>
                 </div>
               </div>
             </div>
@@ -1209,7 +1295,9 @@ const AddNewCaseForm = () => {
                     placeholder="name@example.com"
                     onChange={handleCourtOrdersPdfChange}
                   />
-                  <label htmlFor="floatingInput">Court Orders: <strong>{courtOrdersPdf?.name}</strong></label>
+                  <label htmlFor="floatingInput">
+                    Court Orders: <strong>{courtOrdersPdf?.name}</strong>
+                  </label>
                 </div>
               </div>
               <div className="col-lg-6 col-md-6 col-sm-12 col-12">
@@ -1221,7 +1309,9 @@ const AddNewCaseForm = () => {
                     placeholder="name@example.com"
                     onChange={handleJudgementsPdfChange}
                   />
-                  <label htmlFor="floatingInput2">Judgements: <strong>{judgementsPdf?.name}</strong></label>
+                  <label htmlFor="floatingInput2">
+                    Judgements: <strong>{judgementsPdf?.name}</strong>
+                  </label>
                 </div>
               </div>
             </div>
@@ -1243,7 +1333,10 @@ const AddNewCaseForm = () => {
                 {/* <button className="btn btn-primary" onClick={handlecourtOrdersAndJudgements}> Save</button> */}
               </div>
               <div>
-                <button className="btn" onClick={handlecourtOrdersAndJudgements}>
+                <button
+                  className="btn"
+                  onClick={handlecourtOrdersAndJudgements}
+                >
                   <i
                     className="fa-solid fa-angles-right"
                     style={{ fontSize: "30px" }}
@@ -1299,7 +1392,10 @@ const AddNewCaseForm = () => {
                 </button>
               </div>
               <div>
-                <button className="btn btn-primary" onClick={handleSubmitBtn}> Submit</button>
+                <button className="btn btn-primary" onClick={handleSubmitBtn}>
+                  {" "}
+                  Submit
+                </button>
               </div>
             </div>
           </div>

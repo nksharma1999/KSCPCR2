@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IP } from "../utils/IP";
+import { getToken } from "../utils/getToken";
 
 interface caseListMetaData {
   address: string;
@@ -22,8 +23,13 @@ const CaseTracker = () => {
     navigate(`/case/case-tracker/${id}`);
   };
   const getCaseListInfo = () => {
+    
     axios
-      .get(IP.API + "caselist")
+      .get(IP.API + "caselist",{
+        headers: {
+          'x-access-token': getToken()
+        }
+      })
       .then((res) => {
         setCaseList(res.data);
       })

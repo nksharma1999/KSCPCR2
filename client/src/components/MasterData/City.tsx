@@ -4,6 +4,7 @@ import { AddCity } from "./DataEntry/AddCity";
 import axios from "axios";
 import { IP } from "../utils/IP";
 import { EditInfo, EditinfoInterface } from "./DataEntry/EditInfo";
+import { getToken } from "../utils/getToken";
 
 interface CityInterface {
   CityId: number;
@@ -45,7 +46,11 @@ const City = () => {
 
     if (userConfirmed) {
       axios
-        .delete(IP.API + "city/" + info.CityId)
+        .delete(IP.API + "city/" + info.CityId, {
+          headers: {
+            "x-access-token": getToken(),
+          },
+        })
         .then((res) => {
           console.log(res.data);
           getCityList();
@@ -60,7 +65,11 @@ const City = () => {
       cityName: info.name,
     };
     axios
-      .put(IP.API + "city/" + info.id, body)
+      .put(IP.API + "city/" + info.id, body, {
+        headers: {
+          "x-access-token": getToken(),
+        },
+      })
       .then((res) => {
         console.log(res.data);
         closeEditPage();
@@ -73,7 +82,11 @@ const City = () => {
   };
   const getCityList = () => {
     axios
-      .get(IP.API + "city")
+      .get(IP.API + "city", {
+        headers: {
+          "x-access-token": getToken(),
+        },
+      })
       .then((res) => {
         setCityList(res.data);
       })

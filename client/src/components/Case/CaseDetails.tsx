@@ -1,41 +1,42 @@
 import axios from "axios";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { IP } from "../utils/IP";
+import { getToken } from "../utils/getToken";
 
-interface CaseDetailsMetaData{
-  address:string,
-  age: number,
-  caseDescription:string,
-  caseId:string,
-  caseIdInput:string,
-  caseNotesandUpdatesInput:string,
-  casePriority:string,
-  caseStatus:string,
-  caseTimeline:Date,
-  caseTitle:string,
-  caseType:string,
-  childName:string,
-  city: number,
-  courtName:number,
-  createdDate: Date
-  dob:string,
-  educationalBg:string
-  followUpActionInput:string
-  gender:string,
-  guradian:string,
-  jurisdiction:string,
-  lawyer:string,
-  legalAidDetails:string,
-  nextHearingDate:Date,
-  nextStepsandAction:string,
-  petitioner:string,
-  postCaseMonitoringInput:string,
-  respondent:string,
-  state:number,
-  taluk:number,
-  taskAssignment:string,
-  village:number
+interface CaseDetailsMetaData {
+  address: string;
+  age: number;
+  caseDescription: string;
+  caseId: string;
+  caseIdInput: string;
+  caseNotesandUpdatesInput: string;
+  casePriority: string;
+  caseStatus: string;
+  caseTimeline: Date;
+  caseTitle: string;
+  caseType: string;
+  childName: string;
+  city: number;
+  courtName: number;
+  createdDate: Date;
+  dob: string;
+  educationalBg: string;
+  followUpActionInput: string;
+  gender: string;
+  guradian: string;
+  jurisdiction: string;
+  lawyer: string;
+  legalAidDetails: string;
+  nextHearingDate: Date;
+  nextStepsandAction: string;
+  petitioner: string;
+  postCaseMonitoringInput: string;
+  respondent: string;
+  state: number;
+  taluk: number;
+  taskAssignment: string;
+  village: number;
 }
 
 const CaseDetails = () => {
@@ -49,60 +50,74 @@ const CaseDetails = () => {
     }
   };
   //Handle Page Number 1 Inputs
-  const [childInformationInput,setChildInformationInput] = useState({
-    childNameInput:'fdfghthe11',
-    ageInput:'8',
-    dobInput:'',
-    guradianInput:'fghjk',
-    educationalBgInput:'cvnbmed',
-    addressInput:'Solagidih chas bokaro',
-  })
-  const childInformationInputChange =(e:any)=>{
+  const [childInformationInput, setChildInformationInput] = useState({
+    childNameInput: "fdfghthe11",
+    ageInput: "",
+    dobInput: "",
+    guradianInput: "",
+    educationalBgInput: "",
+    addressInput: "Solagidih chas bokaro",
+  });
+  const childInformationInputChange = (e: any) => {
     const { name, value } = e.target;
-    setChildInformationInput(prevState => ({
+    setChildInformationInput((prevState) => ({
       ...prevState,
-      [name]: value
+      [name]: value,
     }));
-  }
-  const [selectedGender,setSelectedGender] = useState<string>('male');
-  const handleGenderChange =(e:any)=>{
+  };
+  const [selectedGender, setSelectedGender] = useState<string>("male");
+  const handleGenderChange = (e: any) => {
     setSelectedGender(e.target.value);
-  }
-  const [selectedState,setSelectedState] = useState<string>('karnataka');
-  const handleStateChange =(e:any)=>{
+  };
+  const [selectedState, setSelectedState] = useState<string>("select");
+  const handleStateChange = (e: any) => {
     setSelectedState(e.target.value);
-  }
-  const [selectedCity,setSelectedCity] = useState<string>('Bagalkot');
-  const handleCityChange =(e:any)=>{
+  };
+  const [selectedCity, setSelectedCity] = useState<string>("select");
+  const handleCityChange = (e: any) => {
     setSelectedCity(e.target.value);
-  }
-  const [selectedTaluk,setSelectedTaluk] = useState<string>('Badami');
-  const handleTalukChange =(e:any)=>{
+  };
+  const [selectedTaluk, setSelectedTaluk] = useState<string>("select");
+  const handleTalukChange = (e: any) => {
     setSelectedTaluk(e.target.value);
-  }
-  const [selectedVillage,setSelectedVillage] = useState<string>('Bandakeri');
-  const handleVillageChange =(e:any)=>{
+  };
+  const [selectedVillage, setSelectedVillage] = useState<string>("select");
+  const handleVillageChange = (e: any) => {
     setSelectedVillage(e.target.value);
-  }
-  const saveChildInformation=()=>{
+  };
+  const saveChildInformation = () => {
     // alert(addressInput.current?.value);
     // alert(selectedVillage)
-    const ChildInformationData ={
+    const ChildInformationData = {
       ...childInformationInput,
-      selectedGender:selectedGender,
-      selectedState:selectedState,
-      selectedCity:selectedCity,
-      selectedTaluk:selectedTaluk,
-      selectedVillage:selectedVillage,
-    }
-    axios.put(IP.API +'case/childInformation/'+id, ChildInformationData).then(res=>{
-      console.log(res.data);
-    }).catch(err=>{
-      console.log(err);
-    })
-  }
+      selectedGender: selectedGender,
+      selectedState: selectedState,
+      selectedCity: selectedCity,
+      selectedTaluk: selectedTaluk,
+      selectedVillage: selectedVillage,
+    };
+    axios
+      .put(IP.API + "case/childInformation/" + id, ChildInformationData, {
+        headers: {
+          "x-access-token": getToken(),
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   const validateChildInformation = () => {
-    const { childNameInput, ageInput, dobInput,guradianInput, educationalBgInput, addressInput} = childInformationInput;
+    const {
+      childNameInput,
+      ageInput,
+      dobInput,
+      guradianInput,
+      educationalBgInput,
+      addressInput,
+    } = childInformationInput;
     if (
       !childNameInput ||
       !ageInput ||
@@ -114,10 +129,11 @@ const CaseDetails = () => {
       selectedState === "select" ||
       selectedCity === "select" ||
       selectedTaluk === "select" ||
-      selectedVillage === "select" 
-     
-) {
-      alert("Please fill out all fields and select options in child information.");
+      selectedVillage === "select"
+    ) {
+      alert(
+        "Please fill out all fields and select options in child information."
+      );
       return false;
     }
     return true;
@@ -130,49 +146,65 @@ const CaseDetails = () => {
     }
   };
   //Handle Page Number 2 Inputs
-  const [caseDetailsInput,setCaseDetailsInput] = useState({
-    caseIdInput:'we34t',
-    caseTitleInput:'ererer',
-    caseDescriptionInput:'qsdfgy',
-    courtNameInput:'ngfdser',
-    jurisdictionInput:'utfefdb',
-  })
-  const caseDetailsInputChange =(e:any)=>{
+  const [caseDetailsInput, setCaseDetailsInput] = useState({
+    caseIdInput: "we34t",
+    caseTitleInput: "ererer",
+    caseDescriptionInput: "",
+    courtNameInput: "",
+    jurisdictionInput: "",
+  });
+  const caseDetailsInputChange = (e: any) => {
     const { name, value } = e.target;
-    setCaseDetailsInput(prevState => ({
+    setCaseDetailsInput((prevState) => ({
       ...prevState,
-      [name]: value
+      [name]: value,
     }));
-  }
-  const [selectedCaseType,setSelectedCaseType] = useState<string>('Child Labour');
-  const handleCaseTypeChange =(e:any)=>{
+  };
+  const [selectedCaseType, setSelectedCaseType] =
+    useState<string>("child Labour");
+  const handleCaseTypeChange = (e: any) => {
     setSelectedCaseType(e.target.value);
-  }
-  const [selectedCasePriority,setSelectedCasePriority] = useState<string>('Medium');
-  const handleCasePriorityChange =(e:any)=>{
+  };
+  const [selectedCasePriority, setSelectedCasePriority] =
+    useState<string>("select");
+  const handleCasePriorityChange = (e: any) => {
     setSelectedCasePriority(e.target.value);
-  }
-  const [selectedCaseStatus,setSelectedCaseStatus] = useState<string>('Open');
-  const handleCaseStatusChange =(e:any)=>{
+  };
+  const [selectedCaseStatus, setSelectedCaseStatus] =
+    useState<string>("closed");
+  const handleCaseStatusChange = (e: any) => {
     setSelectedCaseStatus(e.target.value);
-  }
-  const saveCaseDetails =() =>{
+  };
+  const saveCaseDetails = () => {
     // alert(caseIdInput.current?.value);
     // alert(selectedCaseStatus)
-    const CaseDetailsData={
+    const CaseDetailsData = {
       ...caseDetailsInput,
-      selectedCaseType:selectedCaseType,
-      selectedCasePriority:selectedCasePriority,
-      selectedCaseStatus:selectedCaseStatus
-    }
-    axios.put(IP.API +'case/caseDetails/'+id, CaseDetailsData).then(res=>{
-      console.log(res.data);
-    }).catch(err=>{
-      console.log(err);
-    })
-  }
+      selectedCaseType: selectedCaseType,
+      selectedCasePriority: selectedCasePriority,
+      selectedCaseStatus: selectedCaseStatus,
+    };
+    axios
+      .put(IP.API + "case/caseDetails/" + id, CaseDetailsData, {
+        headers: {
+          "x-access-token": getToken(),
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   const validateCaseDetails = () => {
-    const { caseIdInput, caseTitleInput, caseDescriptionInput, courtNameInput, jurisdictionInput } = caseDetailsInput;
+    const {
+      caseIdInput,
+      caseTitleInput,
+      caseDescriptionInput,
+      courtNameInput,
+      jurisdictionInput,
+    } = caseDetailsInput;
     if (
       !caseIdInput ||
       !caseTitleInput ||
@@ -196,30 +228,47 @@ const CaseDetails = () => {
     }
   };
   //Handle Page Number 3 Inputs
-  const [legalRepresentationInput,setLegalRepresentationInput] = useState({
-    lawyerInput:'lkjhfds',
-    petitionerInput:'qwertg',
-    respondentInput:'cvbhfd',
-    legalAidDetailsInput:'xyz',
-  })
-  const LegalRepresentationInputChange =(e:any)=>{
+  const [legalRepresentationInput, setLegalRepresentationInput] = useState({
+    lawyerInput: "",
+    petitionerInput: "",
+    respondentInput: "",
+    legalAidDetailsInput: "",
+  });
+  const LegalRepresentationInputChange = (e: any) => {
     const { name, value } = e.target;
-    setLegalRepresentationInput(prevState => ({
+    setLegalRepresentationInput((prevState) => ({
       ...prevState,
-      [name]: value
+      [name]: value,
     }));
-  }
-  const saveLegalRepresentation =() =>{
+  };
+  const saveLegalRepresentation = () => {
     // alert(legalRepresentationInput.lawyerInput);
-    axios.put(IP.API +'case/legal/'+id, legalRepresentationInput).then(res=>{
-      console.log(res.data);
-    }).catch(err=>{
-      console.log(err);
-    })
-  }
+    axios
+      .put(IP.API + "case/legal/" + id, legalRepresentationInput, {
+        headers: {
+          "x-access-token": getToken(),
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   const validateLegalRepresentation = () => {
-    const { lawyerInput, petitionerInput, respondentInput, legalAidDetailsInput } = legalRepresentationInput;
-    if (!lawyerInput || !petitionerInput || !respondentInput || !legalAidDetailsInput) {
+    const {
+      lawyerInput,
+      petitionerInput,
+      respondentInput,
+      legalAidDetailsInput,
+    } = legalRepresentationInput;
+    if (
+      !lawyerInput ||
+      !petitionerInput ||
+      !respondentInput ||
+      !legalAidDetailsInput
+    ) {
       alert("Update the required fields in Legal Representation.");
       return false;
     }
@@ -233,7 +282,9 @@ const CaseDetails = () => {
     }
   };
   //Handle Page Number 4 Inputs
-  const [protectionOrderPdf, setProtectionOrderPdf] = useState<File | null>(null);
+  const [protectionOrderPdf, setProtectionOrderPdf] = useState<File | null>(
+    null
+  );
   const handleProtectioOrdersPdfChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       setProtectionOrderPdf(e.target.files[0]);
@@ -245,33 +296,44 @@ const CaseDetails = () => {
       setPlacementOrderPdf(e.target.files[0]);
     }
   };
-  const [restrainingOrderPdf, setRestrainingOrderPdf] = useState<File | null>(null);
-  const handleRestrainingOrdersPdfChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const [restrainingOrderPdf, setRestrainingOrderPdf] = useState<File | null>(
+    null
+  );
+  const handleRestrainingOrdersPdfChange = (
+    e: ChangeEvent<HTMLInputElement>
+  ) => {
     if (e.target.files && e.target.files.length > 0) {
       setRestrainingOrderPdf(e.target.files[0]);
     }
   };
-  const saveChildProtectionMeasures=()=>{
+  const saveChildProtectionMeasures = () => {
     const formData = new FormData();
-    if (protectionOrderPdf) formData.append('protectionOrderPdf', protectionOrderPdf);
-    if (placementOrderPdf) formData.append('placementOrderPdf', placementOrderPdf);
-    if (restrainingOrderPdf) formData.append('restrainingOrderPdf', restrainingOrderPdf);
-    const prevPdfId ={
-      protectionOrderPdf:'',
-      placementOrderPdf:'',
-      restrainingOrderPdf:''
-    }
-    formData.append('prevPdfId', JSON.stringify(prevPdfId));
-    axios.put(IP.API +'case/protectionMeasures/'+ id, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    }).then(res=>{
-      console.log(res.data);
-    }).catch(err=>{
-      console.log(err);
-    })
-  }
+    if (protectionOrderPdf)
+      formData.append("protectionOrderPdf", protectionOrderPdf);
+    if (placementOrderPdf)
+      formData.append("placementOrderPdf", placementOrderPdf);
+    if (restrainingOrderPdf)
+      formData.append("restrainingOrderPdf", restrainingOrderPdf);
+    const prevPdfId = {
+      protectionOrderPdf: "",
+      placementOrderPdf: "",
+      restrainingOrderPdf: "",
+    };
+    formData.append("prevPdfId", JSON.stringify(prevPdfId));
+    axios
+      .put(IP.API + "case/protectionMeasures/" + id, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          "x-access-token": getToken(),
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   const validateChildProtectionMeasures = () => {
     if (!protectionOrderPdf || !placementOrderPdf || !restrainingOrderPdf) {
       alert("Please update all required PDFs in Child Protection Measures.");
@@ -293,8 +355,12 @@ const CaseDetails = () => {
       setMedicalReportsPdf(e.target.files[0]);
     }
   };
-  const [witnessStatementsPdf, setWitnessStatementsPdf] = useState<File | null>(null);
-  const handleWitnessStatementsPdfChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const [witnessStatementsPdf, setWitnessStatementsPdf] = useState<File | null>(
+    null
+  );
+  const handleWitnessStatementsPdfChange = (
+    e: ChangeEvent<HTMLInputElement>
+  ) => {
     if (e.target.files && e.target.files.length > 0) {
       setWitnessStatementsPdf(e.target.files[0]);
     }
@@ -323,33 +389,39 @@ const CaseDetails = () => {
       setSchoolRecordsPdf(e.target.files[0]);
     }
   };
-  const saveEvidence=() =>{
+  const saveEvidence = () => {
     const formData = new FormData();
-    if (medicalReportsPdf) formData.append('medicalReportsPdf', medicalReportsPdf);
-    if (witnessStatementsPdf) formData.append('witnessStatementsPdf', witnessStatementsPdf);
-    if (policeReportsPdf) formData.append('policeReportsPdf', policeReportsPdf);
-    if (photographsPdf) formData.append('photographsPdf', photographsPdf);
-    if (testimonyPdf) formData.append('testimonyPdf', testimonyPdf);
-    if (schoolRecordsPdf) formData.append('schoolRecordsPdf', schoolRecordsPdf);
-    const prevPdfId ={
-      medicalReportsPdf:'',
-      witnessStatementsPdf:'',
-      policeReportsPdf:'',
-      photographsPdf:'',
-      testimonyPdf:'',
-      schoolRecordsPdf:'',
-    }
-    formData.append('prevPdfId', JSON.stringify(prevPdfId));
-    axios.put(IP.API +'case/evidence/'+ id, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    }).then(res=>{
-      console.log(res.data);
-    }).catch(err=>{
-      console.log(err);
-    })
-  }
+    if (medicalReportsPdf)
+      formData.append("medicalReportsPdf", medicalReportsPdf);
+    if (witnessStatementsPdf)
+      formData.append("witnessStatementsPdf", witnessStatementsPdf);
+    if (policeReportsPdf) formData.append("policeReportsPdf", policeReportsPdf);
+    if (photographsPdf) formData.append("photographsPdf", photographsPdf);
+    if (testimonyPdf) formData.append("testimonyPdf", testimonyPdf);
+    if (schoolRecordsPdf) formData.append("schoolRecordsPdf", schoolRecordsPdf);
+    const prevPdfId = {
+      medicalReportsPdf: "",
+      witnessStatementsPdf: "",
+      policeReportsPdf: "",
+      photographsPdf: "",
+      testimonyPdf: "",
+      schoolRecordsPdf: "",
+    };
+    formData.append("prevPdfId", JSON.stringify(prevPdfId));
+    axios
+      .put(IP.API + "case/evidence/" + id, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          "x-access-token": getToken(),
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   const validateEvidence = () => {
     if (
       !medicalReportsPdf ||
@@ -374,38 +446,53 @@ const CaseDetails = () => {
 
   //Handle Page Number 6 Inputs
 
-  const [caseManagementInput,setCaseManagementInput] = useState({
-    caseTimelineInput:'',
-    nextHearingDateInput:'',
-    nextStepsandActionInput:'derghjut',
-    taskAssignmentInput:'asvbhte',
-    caseNotesandUpdatesInput:'zxcvbn',
-  })
-  const CaseManagementInputChange =(e:any)=>{
+  const [caseManagementInput, setCaseManagementInput] = useState({
+    caseTimelineInput: "",
+    nextHearingDateInput: "",
+    nextStepsandActionInput: "",
+    taskAssignmentInput: "",
+    caseNotesandUpdatesInput: "",
+  });
+  const CaseManagementInputChange = (e: any) => {
     const { name, value } = e.target;
-    setCaseManagementInput(prevState => ({
+    setCaseManagementInput((prevState) => ({
       ...prevState,
-      [name]: value
+      [name]: value,
     }));
-  }
-  const saveCaseManagement=() =>{
+  };
+  const saveCaseManagement = () => {
     // alert(caseManagementInput.caseNotesandUpdatesInput)
-    axios.put(IP.API +'case/caseManagement/'+id, caseManagementInput).then(res=>{
-      console.log(res.data);
-    }).catch(err=>{
-      console.log(err);
-    })
-  }
+    axios
+      .put(IP.API + "case/caseManagement/" + id, caseManagementInput, {
+        headers: {
+          "x-access-token": getToken(),
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   const validatecaseManagement = () => {
-    const { caseTimelineInput, nextHearingDateInput, nextStepsandActionInput, taskAssignmentInput, caseNotesandUpdatesInput } = caseManagementInput;
+    const {
+      caseTimelineInput,
+      nextHearingDateInput,
+      nextStepsandActionInput,
+      taskAssignmentInput,
+      caseNotesandUpdatesInput,
+    } = caseManagementInput;
     if (
       !caseTimelineInput ||
       !nextHearingDateInput ||
       !nextStepsandActionInput ||
       !taskAssignmentInput ||
-      !caseNotesandUpdatesInput 
+      !caseNotesandUpdatesInput
     ) {
-      alert("Please fill out all fields and select options in Case Management.");
+      alert(
+        "Please fill out all fields and select options in Case Management."
+      );
       return false;
     }
     return true;
@@ -431,25 +518,29 @@ const CaseDetails = () => {
       setJudgementsPdf(e.target.files[0]);
     }
   };
-  const savecourtOrdersAndJudgements = ()=>{
+  const savecourtOrdersAndJudgements = () => {
     const formData = new FormData();
-    if (courtOrdersPdf) formData.append('courtOrdersPdf', courtOrdersPdf);
-    if (judgementsPdf) formData.append('judgementsPdf', judgementsPdf);
-    const prevPdfId ={
-      courtOrdersPdf:'',
-      judgementsPdf:'',
-    }
-    formData.append('prevPdfId', JSON.stringify(prevPdfId));
-    axios.put(IP.API +'case/judgements/'+ id, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    }).then(res=>{
-      console.log(res.data);
-    }).catch(err=>{
-      console.log(err);
-    })
-  }
+    if (courtOrdersPdf) formData.append("courtOrdersPdf", courtOrdersPdf);
+    if (judgementsPdf) formData.append("judgementsPdf", judgementsPdf);
+    const prevPdfId = {
+      courtOrdersPdf: "",
+      judgementsPdf: "",
+    };
+    formData.append("prevPdfId", JSON.stringify(prevPdfId));
+    axios
+      .put(IP.API + "case/judgements/" + id, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          "x-access-token": getToken(),
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   const validatecourtOrdersAndJudgements = () => {
     if (!courtOrdersPdf || !judgementsPdf) {
       alert("Please upload all required PDFs in Court Order and Judgements.");
@@ -465,24 +556,31 @@ const CaseDetails = () => {
     }
   };
   //Handle Page Number 8 Inputs
-  const [data,setdata] = useState({
-    postCaseMonitoringInput:'',
-    followUpActionInput:'',
-  })
-  const dataInputChange =(e:any)=>{
+  const [data, setdata] = useState({
+    postCaseMonitoringInput: "",
+    followUpActionInput: "",
+  });
+  const dataInputChange = (e: any) => {
     const { name, value } = e.target;
-    setdata(prevState => ({
+    setdata((prevState) => ({
       ...prevState,
-      [name]: value
+      [name]: value,
     }));
-  }
-  const savedata =() =>{
-    axios.put(IP.API +'case/follow-up/'+id, data).then(res=>{
-      console.log(res.data);
-    }).catch(err=>{
-      console.log(err);
-    })
-  }
+  };
+  const savedata = () => {
+    axios
+      .put(IP.API + "case/follow-up/" + id, data, {
+        headers: {
+          "x-access-token": getToken(),
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   const validatedata = () => {
     const { postCaseMonitoringInput, followUpActionInput } = data;
     if (!postCaseMonitoringInput || !followUpActionInput) {
@@ -512,24 +610,36 @@ const CaseDetails = () => {
   //     console.log(err);
   //   })
   // }
-  const getCaseDetailsInfo =() =>{
-    axios.get(IP.API+'case/'+id).then(res=>{
-      const data:CaseDetailsMetaData = res.data[0];
-      setChildInformationInput({
-        childNameInput:data.childName,
-        ageInput:data.age.toString(),
-        dobInput: data.dob.split('T')[0],
-        guradianInput:data.guradian,
-        educationalBgInput:data.educationalBg,
-        addressInput:data.address
+  const navigate = useNavigate();
+  const getCaseDetailsInfo = () => {
+    axios
+      .get(IP.API + "case/" + id, {
+        headers: {
+          "x-access-token": getToken(),
+        },
+      })
+      .then((res) => {
+        const data: CaseDetailsMetaData = res.data[0];
+        if (data) {
+          setChildInformationInput({
+            childNameInput: data.childName,
+            ageInput: data.age.toString(),
+            dobInput: data.dob.split("T")[0],
+            guradianInput: data.guradian,
+            educationalBgInput: data.educationalBg,
+            addressInput: data.address,
+          });
+        }else{
+          navigate(-1);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
       });
-    }).catch(error=>{
-      console.error(error);
-    })
-  }
-  useEffect(()=>{
-    getCaseDetailsInfo()
-  },[]);
+  };
+  useEffect(() => {
+    getCaseDetailsInfo();
+  }, []);
   return (
     <>
       <div className={"card "} style={{ padding: "10px" }}>
@@ -605,9 +715,7 @@ const CaseDetails = () => {
                   onChange={handleGenderChange}
                 >
                   <option value="select">--- Select Gender ---</option>
-                  <option value="male" selected>
-                    Male
-                  </option>
+                  <option value="male">Male</option>
                   <option value="female">Female</option>
                 </select>
                 <label htmlFor="floatingSelect0">Gender</label>
@@ -635,7 +743,7 @@ const CaseDetails = () => {
                   className="form-control"
                   id="floatingInput6"
                   placeholder="name@example.com"
-                  name="educationalBgInput"                    
+                  name="educationalBgInput"
                   onChange={childInformationInputChange}
                   value={childInformationInput.educationalBgInput}
                   disabled={editId === 1 ? false : true}
@@ -651,8 +759,8 @@ const CaseDetails = () => {
                   id="floatingInput7"
                   placeholder="name@example.com"
                   name="addressInput"
-                    onChange={childInformationInputChange}
-                    value={childInformationInput.addressInput}
+                  onChange={childInformationInputChange}
+                  value={childInformationInput.addressInput}
                   disabled={editId === 1 ? false : true}
                 />
                 <label htmlFor="floatingInput7">Address </label>
@@ -666,12 +774,10 @@ const CaseDetails = () => {
                   aria-label="Floating label select example"
                   disabled={editId === 1 ? false : true}
                   value={selectedState}
-                    onChange={handleStateChange}
+                  onChange={handleStateChange}
                 >
                   <option value="select">--- Select State ---</option>
-                  <option value="karnataka" selected>
-                    karnataka
-                  </option>
+                  <option value="karnataka">karnataka</option>
                   <option value="2">Two</option>
                   <option value="3">Three</option>
                 </select>
@@ -686,12 +792,10 @@ const CaseDetails = () => {
                   aria-label="Floating label select example"
                   disabled={editId === 1 ? false : true}
                   value={selectedCity}
-                    onChange={handleCityChange}
+                  onChange={handleCityChange}
                 >
                   <option value="select">--- Select City ---</option>
-                  <option value="Bagalkot" >
-                    Bagalkot
-                  </option>
+                  <option value="Bagalkot">Bagalkot</option>
                   <option value="2">Two</option>
                   <option value="3">Three</option>
                 </select>
@@ -706,12 +810,10 @@ const CaseDetails = () => {
                   aria-label="Floating label select example"
                   disabled={editId === 1 ? false : true}
                   value={selectedTaluk}
-                    onChange={handleTalukChange}
+                  onChange={handleTalukChange}
                 >
                   <option value="select">--- Select Taluk ---</option>
-                  <option value="Badami">
-                    Badami
-                  </option>
+                  <option value="Badami">Badami</option>
                   <option value="2">Two</option>
                   <option value="3">Three</option>
                 </select>
@@ -726,12 +828,10 @@ const CaseDetails = () => {
                   aria-label="Floating label select example"
                   disabled={editId === 1 ? false : true}
                   value={selectedVillage}
-                    onChange={handleVillageChange}
+                  onChange={handleVillageChange}
                 >
                   <option value="select">--- Select Village ---</option>
-                  <option value="Bandakeri">
-                    Bandakeri
-                  </option>
+                  <option value="Bandakeri">Bandakeri</option>
                   <option value="2">Two</option>
                   <option value="3">Three</option>
                 </select>
@@ -740,8 +840,13 @@ const CaseDetails = () => {
             </div>
             <div className="col-12">
               {editId === 1 && (
-                <div style={{display:'flex',justifyContent:'center'}}>
-                  <button onClick={handleChildInformation} className="btn btn-primary">Update</button>
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                  <button
+                    onClick={handleChildInformation}
+                    className="btn btn-primary"
+                  >
+                    Update
+                  </button>
                 </div>
               )}
             </div>
@@ -786,8 +891,8 @@ const CaseDetails = () => {
                   id="floatingInput2"
                   placeholder="name@example.com"
                   name="caseTitleInput"
-                    onChange={caseDetailsInputChange}
-                    value={caseDetailsInput.caseTitleInput}
+                  onChange={caseDetailsInputChange}
+                  value={caseDetailsInput.caseTitleInput}
                   disabled={editId === 2 ? false : true}
                 />
                 <label htmlFor="floatingInput2">Case Title</label>
@@ -802,12 +907,10 @@ const CaseDetails = () => {
                   aria-label="Floating label select example"
                   disabled={editId === 2 ? false : true}
                   value={selectedCaseType}
-                    onChange={handleCaseTypeChange}
+                  onChange={handleCaseTypeChange}
                 >
                   <option value="select">--- Select Case Type ---</option>
-                  <option value="Child Protection">
-                    Child Protection
-                  </option>
+                  <option value="Child Protection">Child Protection</option>
                   <option value="Child Custody">Child Custody</option>
                   <option value="Child Labour">Child Labour</option>
                   <option value="Child Abuse">Child Abuse</option>
@@ -823,12 +926,10 @@ const CaseDetails = () => {
                   aria-label="Floating label select example"
                   disabled={editId === 2 ? false : true}
                   value={selectedCasePriority}
-                    onChange={handleCasePriorityChange}
+                  onChange={handleCasePriorityChange}
                 >
                   <option value="select">--- Select Case Priority ---</option>
-                  <option value="High" >
-                    High
-                  </option>
+                  <option value="High">High</option>
                   <option value="Medium">Medium</option>
                   <option value="Low">Low</option>
                 </select>
@@ -844,8 +945,8 @@ const CaseDetails = () => {
                   id="floatingInput7"
                   placeholder="name@example.com"
                   name="caseDescriptionInput"
-                    onChange={caseDetailsInputChange}
-                    value={caseDetailsInput.caseDescriptionInput}
+                  onChange={caseDetailsInputChange}
+                  value={caseDetailsInput.caseDescriptionInput}
                   disabled={editId === 2 ? false : true}
                 />
                 <label htmlFor="floatingInput7">Case Description </label>
@@ -862,7 +963,6 @@ const CaseDetails = () => {
                   onChange={caseDetailsInputChange}
                   value={caseDetailsInput.courtNameInput}
                   disabled={editId === 2 ? false : true}
-
                 />
                 <label htmlFor="floatingInput6">Court Name</label>
               </div>
@@ -890,12 +990,10 @@ const CaseDetails = () => {
                   aria-label="Floating label select example"
                   disabled={editId === 2 ? false : true}
                   value={selectedCaseStatus}
-                    onChange={handleCaseStatusChange}
+                  onChange={handleCaseStatusChange}
                 >
                   <option value="select">--- Select Case Status ---</option>
-                  <option value="Open">
-                    Open
-                  </option>
+                  <option value="Open">Open</option>
                   <option value="Closed">Closed</option>
                   <option value="Pending">Pending</option>
                 </select>
@@ -904,8 +1002,13 @@ const CaseDetails = () => {
             </div>
             <div className="col-12">
               {editId === 2 && (
-                <div style={{display:'flex',justifyContent:'center'}}>
-                  <button onClick={handleCaseDetails} className="btn btn-primary">Update</button>
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                  <button
+                    onClick={handleCaseDetails}
+                    className="btn btn-primary"
+                  >
+                    Update
+                  </button>
                 </div>
               )}
             </div>
@@ -993,8 +1096,13 @@ const CaseDetails = () => {
             </div>
             <div className="col-12">
               {editId === 3 && (
-                <div style={{display:'flex',justifyContent:'center'}}>
-                  <button onClick={handleLegalRepresentation} className="btn btn-primary">Update</button>
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                  <button
+                    onClick={handleLegalRepresentation}
+                    className="btn btn-primary"
+                  >
+                    Update
+                  </button>
                 </div>
               )}
             </div>
@@ -1062,8 +1170,13 @@ const CaseDetails = () => {
             </div>
             <div className="col-12">
               {editId === 4 && (
-                <div style={{display:'flex',justifyContent:'center'}}>
-                  <button onClick={handleChildProtectionMeasures} className="btn btn-primary">Update</button>
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                  <button
+                    onClick={handleChildProtectionMeasures}
+                    className="btn btn-primary"
+                  >
+                    Update
+                  </button>
                 </div>
               )}
             </div>
@@ -1173,8 +1286,10 @@ const CaseDetails = () => {
             </div>
             <div className="col-12">
               {editId === 5 && (
-                <div style={{display:'flex',justifyContent:'center'}}>
-                  <button onClick={handleEvidence} className="btn btn-primary">Update</button>
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                  <button onClick={handleEvidence} className="btn btn-primary">
+                    Update
+                  </button>
                 </div>
               )}
             </div>
@@ -1275,8 +1390,13 @@ const CaseDetails = () => {
             </div>
             <div className="col-12">
               {editId === 6 && (
-                <div style={{display:'flex',justifyContent:'center'}}>
-                  <button onClick={handleCaseManagement} className="btn btn-primary">Update</button>
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                  <button
+                    onClick={handleCaseManagement}
+                    className="btn btn-primary"
+                  >
+                    Update
+                  </button>
                 </div>
               )}
             </div>
@@ -1328,8 +1448,13 @@ const CaseDetails = () => {
             </div>
             <div className="col-12">
               {editId === 7 && (
-                <div style={{display:'flex',justifyContent:'center'}}>
-                  <button onClick={handlecourtOrdersAndJudgements} className="btn btn-primary">Update</button>
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                  <button
+                    onClick={handlecourtOrdersAndJudgements}
+                    className="btn btn-primary"
+                  >
+                    Update
+                  </button>
                 </div>
               )}
             </div>
@@ -1389,8 +1514,10 @@ const CaseDetails = () => {
             </div>
             <div className="col-12">
               {editId === 8 && (
-                <div style={{display:'flex',justifyContent:'center'}}>
-                  <button onClick={handledata} className="btn btn-primary">Update</button>
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                  <button onClick={handledata} className="btn btn-primary">
+                    Update
+                  </button>
                 </div>
               )}
             </div>

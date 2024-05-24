@@ -4,7 +4,7 @@ export const Sidebar = () => {
   const baseUrl = window.location.origin;
   const nav = useNavigate();
   const handleLogOut = () => {
-    localStorage.removeItem("auth");
+    localStorage.removeItem("token");
     nav('/');
     window.location.reload();
   };

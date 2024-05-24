@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { IP } from "../../utils/IP";
 import { StateInterface } from "../State";
+import { getToken } from "../../utils/getToken";
 
 interface props {
   closeAddComponent: () => void;
@@ -30,7 +31,11 @@ export const AddVillage: React.FC<props> = ({ closeAddComponent }) => {
     setSelectedState(e.target.value);
     if (e.target.value !== "select") {
       axios
-        .get(IP.API + "district/filter/" + e.target.value)
+        .get(IP.API + "district/filter/" + e.target.value,{
+          headers: {
+            "x-access-token": getToken(),
+          },
+        })
         .then((res) => {
           const data = res.data;
           setSelectedDistrict("select");
@@ -48,7 +53,11 @@ export const AddVillage: React.FC<props> = ({ closeAddComponent }) => {
     setSelectedDistrict(e.target.value);
     if (e.target.value !== "select") {
       axios
-        .get(IP.API + "city/filter/" + e.target.value)
+        .get(IP.API + "city/filter/" + e.target.value,{
+          headers: {
+            "x-access-token": getToken(),
+          },
+        })
         .then((res) => {
           const data = res.data;
           setSelectedCity("select");
@@ -65,7 +74,11 @@ export const AddVillage: React.FC<props> = ({ closeAddComponent }) => {
     setSelectedCity(e.target.value);
     if (e.target.value !== "select") {
       axios
-        .get(IP.API + "taluk/filter/" + e.target.value)
+        .get(IP.API + "taluk/filter/" + e.target.value,{
+          headers: {
+            "x-access-token": getToken(),
+          },
+        })
         .then((res) => {
           const data = res.data;
           setSelectedTaluk("select");
@@ -95,7 +108,11 @@ export const AddVillage: React.FC<props> = ({ closeAddComponent }) => {
       selectedTaluk: selectedTaluk,
     };
     axios
-      .post(IP.API + "addNewVillage", body)
+      .post(IP.API + "addNewVillage", body,{
+        headers: {
+          "x-access-token": getToken(),
+        },
+      })
       .then((res) => {
         console.log(res.data);
         closeAddComponent();
@@ -107,7 +124,11 @@ export const AddVillage: React.FC<props> = ({ closeAddComponent }) => {
   };
   const getStateList = () => {
     axios
-      .get(IP.API + "state")
+      .get(IP.API + "state",{
+        headers: {
+          "x-access-token": getToken(),
+        },
+      })
       .then((data) => {
         setStateList(data.data);
       })

@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { IP } from "../../utils/IP";
 import { StateInterface } from "../State";
+import { getToken } from "../../utils/getToken";
 
 interface props {
   closeAddComponent: () => void;
@@ -23,7 +24,11 @@ export const AddDistrict: React.FC<props> = ({ closeAddComponent }) => {
       selectedState: selectedState,
     };
     axios
-      .post(IP.API + "addNewDistrict", body)
+      .post(IP.API + "addNewDistrict", body,{
+        headers: {
+          "x-access-token": getToken(),
+        },
+      })
       .then((res) => {
         console.log(res.data);
         closeAddComponent();
@@ -35,7 +40,11 @@ export const AddDistrict: React.FC<props> = ({ closeAddComponent }) => {
   };
   const getStateList = () => {
     axios
-      .get(IP.API + "state")
+      .get(IP.API + "state",{
+        headers: {
+          "x-access-token": getToken(),
+        },
+      })
       .then((data) => {
         setStateList(data.data);
       })

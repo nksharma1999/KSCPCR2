@@ -3,6 +3,7 @@ import { AddState } from "./DataEntry/AddState";
 import axios from "axios";
 import { IP } from "../utils/IP";
 import { EditInfo, EditinfoInterface } from "./DataEntry/EditInfo";
+import { getToken } from "../utils/getToken";
 
 export interface StateInterface {
   StateId: number;
@@ -39,7 +40,11 @@ const State = () => {
       stateName: info.name,
     };
     axios
-      .put(IP.API + "state/" + info.id, body)
+      .put(IP.API + "state/" + info.id, body, {
+        headers: {
+          "x-access-token": getToken(),
+        },
+      })
       .then((res) => {
         console.log(res.data);
         closeEditPage();
@@ -52,7 +57,11 @@ const State = () => {
   };
   const getStateList = () => {
     axios
-      .get(IP.API + "state")
+      .get(IP.API + "state", {
+        headers: {
+          "x-access-token": getToken(),
+        },
+      })
       .then((data) => {
         setStateList(data.data);
       })
@@ -67,7 +76,11 @@ const State = () => {
 
     if (userConfirmed) {
       axios
-        .delete(IP.API + "state/" + info.StateId)
+        .delete(IP.API + "state/" + info.StateId, {
+          headers: {
+            "x-access-token": getToken(),
+          },
+        })
         .then((res) => {
           console.log(res.data);
           getStateList();

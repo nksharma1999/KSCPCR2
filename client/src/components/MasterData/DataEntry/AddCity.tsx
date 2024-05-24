@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { IP } from "../../utils/IP";
 import { StateInterface } from "../State";
+import { getToken } from "../../utils/getToken";
 
 interface props {
   closeAddComponent: () => void;
@@ -18,7 +19,11 @@ export const AddCity: React.FC<props> = ({ closeAddComponent }) => {
   const [selectedState,setSelectedState] = useState<string>('select');
   const handleStateChange =(e:any)=>{
     setSelectedState(e.target.value);
-    axios.get(IP.API+"district/filter/"+ e.target.value).then(res=>{
+    axios.get(IP.API+"district/filter/"+ e.target.value,{
+      headers: {
+        "x-access-token": getToken(),
+      },
+    }).then(res=>{
       setDistrictList(res.data);
       setSelectedDistrict('select');
     }).catch(error=>{console.error(error)})
@@ -35,7 +40,11 @@ export const AddCity: React.FC<props> = ({ closeAddComponent }) => {
       selectedState:selectedState,
       selectedDistrict:selectedDistrict
     }
-    axios.post(IP.API +'addNewCity', body).then(res=>{
+    axios.post(IP.API +'addNewCity', body,{
+      headers: {
+        "x-access-token": getToken(),
+      },
+    }).then(res=>{
       console.log(res.data);
       closeAddComponent();
     }).catch(err=>{
@@ -45,7 +54,11 @@ export const AddCity: React.FC<props> = ({ closeAddComponent }) => {
   }
   const getStateList = () => {
     axios
-      .get(IP.API + "state")
+      .get(IP.API + "state",{
+        headers: {
+          "x-access-token": getToken(),
+        },
+      })
       .then((res) => {
         setStateList(res.data);
       })

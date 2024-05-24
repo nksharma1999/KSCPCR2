@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { IP } from "../../utils/IP";
 import { StateInterface } from "../State";
+import { getToken } from "../../utils/getToken";
 
 interface props {
   closeAddComponent: () => void;
@@ -24,7 +25,11 @@ export const AddTaluk: React.FC<props> = ({ closeAddComponent }) => {
     setSelectedState(e.target.value);
     if (e.target.value !== "select") {
       axios
-        .get(IP.API + "district/filter/" + e.target.value)
+        .get(IP.API + "district/filter/" + e.target.value,{
+          headers: {
+            "x-access-token": getToken(),
+          },
+        })
         .then((res) => {
           const data = res.data;
           setSelectedDistrict("select");
@@ -41,7 +46,11 @@ export const AddTaluk: React.FC<props> = ({ closeAddComponent }) => {
     setSelectedDistrict(e.target.value);
     if (e.target.value !== "select") {
       axios
-        .get(IP.API + "city/filter/" + e.target.value)
+        .get(IP.API + "city/filter/" + e.target.value,{
+          headers: {
+            "x-access-token": getToken(),
+          },
+        })
         .then((res) => {
           const data = res.data;
           setSelectedCity("select");
@@ -70,7 +79,11 @@ export const AddTaluk: React.FC<props> = ({ closeAddComponent }) => {
       selectedCity: selectedCity,
     };
     axios
-      .post(IP.API + "addNewTaluk", body)
+      .post(IP.API + "addNewTaluk", body,{
+        headers: {
+          "x-access-token": getToken(),
+        },
+      })
       .then((res) => {
         console.log(res.data);
         closeAddComponent();
@@ -82,7 +95,11 @@ export const AddTaluk: React.FC<props> = ({ closeAddComponent }) => {
   };
   const getStateList = () => {
     axios
-      .get(IP.API + "state")
+      .get(IP.API + "state",{
+        headers: {
+          "x-access-token": getToken(),
+        },
+      })
       .then((data) => {
         setStateList(data.data);
       })

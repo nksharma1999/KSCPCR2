@@ -4,6 +4,7 @@ import { AddDistrict } from "./DataEntry/AddDistrict";
 import axios from "axios";
 import { IP } from "../utils/IP";
 import { EditInfo, EditinfoInterface } from "./DataEntry/EditInfo";
+import { getToken } from "../utils/getToken";
 
 export interface DistrictInterface {
   StateId: number;
@@ -44,7 +45,11 @@ const District = () => {
 
     if (userConfirmed) {
       axios
-        .delete(IP.API + "district/" + info.DistrictId)
+        .delete(IP.API + "district/" + info.DistrictId,{
+          headers: {
+            "x-access-token": getToken(),
+          },
+        })
         .then((res) => {
           console.log(res.data);
           getDistrictList();
@@ -59,7 +64,11 @@ const District = () => {
       districtName: info.name,
     };
     axios
-      .put(IP.API + "district/" + info.id, body)
+      .put(IP.API + "district/" + info.id, body,{
+        headers: {
+          "x-access-token": getToken(),
+        },
+      })
       .then((res) => {
         console.log(res.data);
         closeEditPage();
@@ -72,7 +81,11 @@ const District = () => {
   };
   const getDistrictList = () => {
     axios
-      .get(IP.API + "district")
+      .get(IP.API + "district",{
+        headers: {
+          "x-access-token": getToken(),
+        },
+      })
       .then((res) => {
         setDistrictList(res.data);
       })

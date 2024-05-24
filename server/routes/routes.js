@@ -20,58 +20,64 @@ import {updatefollowUpInfo} from '../controller/caseInfoUpdate/updatefollowUpInf
 import {getCaseList} from '../controller/Dashboard/getCaselist.js';
 import {getCaseDetails} from '../controller/Dashboard/getCaseDetails.js';
 import {getFilterDistrictList,getFilterCityList,getFilterTalukList} from '../controller/masterData/address/filteredInfo.js';
+import {login,isUserLogin} from '../controller/Auth/login.js';
+import {verifyJWT} from '../controller/Auth/verifyJWT.js';
 const userRoutes = express.Router();
 const fileUpload = multer({ dest: "uploads/" });
+
+//Auth
+userRoutes.post('/login',login);
+userRoutes.post('/auth',isUserLogin);
 //Case Info
-userRoutes.post("/addNewCase",fileUpload.fields(createNewCasePdfType),createNewCase)
+userRoutes.post("/addNewCase",verifyJWT,fileUpload.fields(createNewCasePdfType),createNewCase)
 //Dashboard
-userRoutes.get("/caselist",getCaseList);
-userRoutes.get('/case/:id',getCaseDetails);
-userRoutes.put("/case/childInformation/:id",updateChildInfo)
-userRoutes.put("/case/caseDetails/:id",updateCaseDetails)
-userRoutes.put("/case/legal/:id",updateLegalRepInfo)
-userRoutes.put("/case/caseManagement/:id",updateCaseManagementInfo)
-userRoutes.put("/case/follow-up/:id",updatefollowUpInfo)
-userRoutes.put("/case/protectionMeasures/:id",fileUpload.fields(createNewCasePdfType),updateProtectionMeasuresPdf)
-userRoutes.put("/case/evidence/:id",fileUpload.fields(createNewCasePdfType),updateEvidencePdf)
-userRoutes.put("/case/judgements/:id",fileUpload.fields(createNewCasePdfType),updateJudgementsPdf)
+userRoutes.get("/caselist",verifyJWT,getCaseList);
+userRoutes.get('/case/:id',verifyJWT,getCaseDetails);
+userRoutes.put("/case/childInformation/:id",verifyJWT,updateChildInfo)
+userRoutes.put("/case/caseDetails/:id",verifyJWT,updateCaseDetails)
+userRoutes.put("/case/legal/:id",verifyJWT,updateLegalRepInfo)
+userRoutes.put("/case/caseManagement/:id",verifyJWT,updateCaseManagementInfo)
+userRoutes.put("/case/follow-up/:id",verifyJWT,updatefollowUpInfo)
+userRoutes.put("/case/protectionMeasures/:id",verifyJWT,fileUpload.fields(createNewCasePdfType),updateProtectionMeasuresPdf)
+userRoutes.put("/case/evidence/:id",verifyJWT,fileUpload.fields(createNewCasePdfType),updateEvidencePdf)
+userRoutes.put("/case/judgements/:id",verifyJWT,fileUpload.fields(createNewCasePdfType),updateJudgementsPdf)
 //State
-userRoutes.get("/state",getStateList);
-userRoutes.post("/addNewState",addNewState);
-userRoutes.put("/state/:id",updateState);
-userRoutes.delete("/state/:id",removeState);
+userRoutes.get("/state",verifyJWT,getStateList);
+userRoutes.post("/addNewState",verifyJWT,addNewState);
+userRoutes.put("/state/:id",verifyJWT,updateState);
+userRoutes.delete("/state/:id",verifyJWT,removeState);
 //District
-userRoutes.get("/district",getDistrictList);
-userRoutes.post("/addNewDistrict",addNewDistrict);
-userRoutes.put("/district/:id",updateDistrict);
-userRoutes.delete("/district/:id",removeDistrict);
+userRoutes.get("/district",verifyJWT,getDistrictList);
+userRoutes.post("/addNewDistrict",verifyJWT,addNewDistrict);
+userRoutes.put("/district/:id",verifyJWT,updateDistrict);
+userRoutes.delete("/district/:id",verifyJWT,removeDistrict);
 //City
-userRoutes.get("/city",getCityList);
-userRoutes.post("/addNewCity",addNewCity);
-userRoutes.put("/city/:id",updateCity);
-userRoutes.delete("/city/:id",removeCity);
+userRoutes.get("/city",verifyJWT,getCityList);
+userRoutes.post("/addNewCity",verifyJWT,addNewCity);
+userRoutes.put("/city/:id",verifyJWT,updateCity);
+userRoutes.delete("/city/:id",verifyJWT,removeCity);
 //Taluk
-userRoutes.get("/taluk",getTalukList);
-userRoutes.post("/addNewTaluk",addNewTaluk);
-userRoutes.put("/taluk/:id",updateTaluk);
-userRoutes.delete("/taluk/:id",removeTaluk);
+userRoutes.get("/taluk",verifyJWT,getTalukList);
+userRoutes.post("/addNewTaluk",verifyJWT,addNewTaluk);
+userRoutes.put("/taluk/:id",verifyJWT,updateTaluk);
+userRoutes.delete("/taluk/:id",verifyJWT,removeTaluk);
 //Village
-userRoutes.get("/village",getVillageList);
-userRoutes.post("/addNewVillage",addNewVillage);
-userRoutes.put("/village/:id",updateVillage);
-userRoutes.delete("/village/:id",removeVillage);
+userRoutes.get("/village",verifyJWT,getVillageList);
+userRoutes.post("/addNewVillage",verifyJWT,addNewVillage);
+userRoutes.put("/village/:id",verifyJWT,updateVillage);
+userRoutes.delete("/village/:id",verifyJWT,removeVillage);
 //Court
-userRoutes.get("/Court",getCourtList);
-userRoutes.post("/Court",addNewCourt);
-userRoutes.put("/Court/:id",updateCourt);
-userRoutes.delete("/Court/:id",removeCourt);
+userRoutes.get("/Court",verifyJWT,getCourtList);
+userRoutes.post("/Court",verifyJWT,addNewCourt);
+userRoutes.put("/Court/:id",verifyJWT,updateCourt);
+userRoutes.delete("/Court/:id",verifyJWT,removeCourt);
 //Jurisdiction
-userRoutes.get("/Jurisdiction",getJurisdictionList);
-userRoutes.post("/Jurisdiction",addNewJurisdiction);
-userRoutes.put("/Jurisdiction/:id",updateJurisdiction);
-userRoutes.delete("/Jurisdiction/:id",removeJurisdiction);
+userRoutes.get("/Jurisdiction",verifyJWT,getJurisdictionList);
+userRoutes.post("/Jurisdiction",verifyJWT,addNewJurisdiction);
+userRoutes.put("/Jurisdiction/:id",verifyJWT,updateJurisdiction);
+userRoutes.delete("/Jurisdiction/:id",verifyJWT,removeJurisdiction);
 //Filter Master Info
-userRoutes.get("/district/filter/:stateId",getFilterDistrictList)
-userRoutes.get("/city/filter/:districtId",getFilterCityList)
-userRoutes.get("/taluk/filter/:cityId",getFilterTalukList)
+userRoutes.get("/district/filter/:stateId",verifyJWT,getFilterDistrictList)
+userRoutes.get("/city/filter/:districtId",verifyJWT,getFilterCityList)
+userRoutes.get("/taluk/filter/:cityId",verifyJWT,getFilterTalukList)
 export default userRoutes;

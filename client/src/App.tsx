@@ -8,6 +8,8 @@ import CaseDetails from "./components/Case/CaseDetails";
 import { Login } from "./components/Login/Login";
 import { Index } from "./components/MasterData/Index";
 import { CourtInfo } from "./components/MasterData/CourtInfo";
+import axios from "axios";
+import { IP } from "./components/utils/IP";
 const DashBoard = lazy(() => import("./components/DashBoard"));
 const State = lazy(() => import("./components/MasterData/State"));
 const District = lazy(() => import("./components/MasterData/District"));
@@ -17,49 +19,68 @@ const Village = lazy(() => import("./components/MasterData/Village"));
 
 function App() {
   const [auth, setAuth] = useState<boolean>(false);
+  const [loading,setLoading] = useState<boolean>(true);
   const updateAuth = (authData: any) => {
     setAuth(authData);
   };
-  useEffect(()=>{
-    const savedData = localStorage.getItem('auth');
-    if(savedData){
-      if(savedData ==='TRUE'){
-        setAuth(true);
-      }
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const body = {
+        token: token,
+      };
+      axios
+        .post(IP.API + "auth", body)
+        .then((res) => {
+          setAuth(res.data.isLogin);
+          setLoading(false)
+        })
+        .catch((error) => {
+          console.error(error);
+          setLoading(false);
+        });
+    }else{
+      setLoading(false);
     }
-  })
+  }, []);
   return (
     <>
-      {!auth && (
-        <Routes>
-          <Route path="/" element={<Login updateAuth={updateAuth} />} />
-          <Route path="*" element={<Login updateAuth={updateAuth} />} />
-        </Routes>
-      )}
-      {auth && (
-        <MainLayout>
-          <Suspense fallback={<Loading />}>
+      {loading ? (
+        <Loading />
+      ) : (
+        <>
+          {!auth && (
             <Routes>
-              <Route path="/" element={<CaseTracker />} />
-
-              <Route path="/master-data" element={<Outlet />}>
-                <Route path="index" element={<Index />} />
-                <Route path="Village" element={<Village />} />
-                <Route path="District" element={<District />} />
-                <Route path="State" element={<State />} />
-                <Route path="Taluk" element={<Taluk />} />
-                <Route path="City" element={<City />} />
-                <Route path="court" element={<CourtInfo />} />
-              </Route>
-              <Route path="/case" element={<Outlet />}>
-                <Route path="case-tracker/" element={<CaseTracker />} />
-                <Route path="case-tracker/:id" element={<CaseDetails />} />
-                <Route path="new-case/" element={<AddNewCaseForm />} />
-                <Route path="new-case/:id" element={<AddNewCaseForm />} />
-              </Route>
+              <Route path="/" element={<Login updateAuth={updateAuth} />} />
+              <Route path="*" element={<Login updateAuth={updateAuth} />} />
             </Routes>
-          </Suspense>
-        </MainLayout>
+          )}
+          {auth && (
+            <MainLayout>
+              <Suspense fallback={<Loading />}>
+                <Routes>
+                  <Route path="/" element={<CaseTracker />} />
+
+                  <Route path="/master-data" element={<Outlet />}>
+                    <Route path="index" element={<Index />} />
+                    <Route path="Village" element={<Village />} />
+                    <Route path="District" element={<District />} />
+                    <Route path="State" element={<State />} />
+                    <Route path="Taluk" element={<Taluk />} />
+                    <Route path="City" element={<City />} />
+                    <Route path="court" element={<CourtInfo />} />
+                  </Route>
+                  <Route path="/case" element={<Outlet />}>
+                    <Route path="case-tracker/" element={<CaseTracker />} />
+                    <Route path="case-tracker/:id" element={<CaseDetails />} />
+                    <Route path="new-case/" element={<AddNewCaseForm />} />
+                    <Route path="new-case/:id" element={<AddNewCaseForm />} />
+                  </Route>
+                </Routes>
+              </Suspense>
+            </MainLayout>
+          )}
+        </>
       )}
     </>
   );
