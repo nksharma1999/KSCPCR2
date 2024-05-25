@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { IP } from "../../utils/IP";
 import { StateInterface } from "../State";
 import { getToken } from "../../utils/getToken";
+import { LoadingToast, UpdateToastInfo, WarningToast } from "../../utils/CustomeToast";
 
 interface props {
   closeAddComponent: () => void;
@@ -33,6 +34,7 @@ export const AddCity: React.FC<props> = ({ closeAddComponent }) => {
   }
   const handleAddBtn =() =>{
     if(selectedState ==='select' || selectedDistrict ==='select'|| cityNameInput.current?.value ===''){
+      WarningToast("Please Select");
       return ;
     }
     const body={
@@ -40,15 +42,16 @@ export const AddCity: React.FC<props> = ({ closeAddComponent }) => {
       selectedState:selectedState,
       selectedDistrict:selectedDistrict
     }
+    const id = LoadingToast();
     axios.post(IP.API +'addNewCity', body,{
       headers: {
         "x-access-token": getToken(),
       },
     }).then(res=>{
-      console.log(res.data);
+      UpdateToastInfo(id,res.data,'success');
       closeAddComponent();
     }).catch(err=>{
-      console.log(err);
+      UpdateToastInfo(id,"Data Not Added!",'error');
       closeAddComponent();
     })
   }

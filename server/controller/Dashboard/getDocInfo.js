@@ -4,7 +4,7 @@ export const getDocInfo = (req, res) => {
   if (id) {
     dbGetDocInfo(id)
       .then((info) => {
-        res.status(200).json(info);
+        res.status(200).json(info.recordset);
       })
       .catch((error) => {
         res.status(400).json(error);

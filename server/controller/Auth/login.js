@@ -21,6 +21,7 @@ export const login = (req, res) => {
       if (password === aPass) {
         const payload = {
           username: username,
+          UserId:info.recordset[0].UserId
         };
         const options = {
           expiresIn: "24h", // Token will expire in 1 hour

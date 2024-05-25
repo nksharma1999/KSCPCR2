@@ -4,6 +4,7 @@ import axios from "axios";
 import { IP } from "../utils/IP";
 import { EditInfo, EditinfoInterface } from "./DataEntry/EditInfo";
 import { getToken } from "../utils/getToken";
+import { LoadingToast, UpdateToastInfo } from "../utils/CustomeToast";
 
 export interface StateInterface {
   StateId: number;
@@ -39,6 +40,7 @@ const State = () => {
     const body = {
       stateName: info.name,
     };
+    const id = LoadingToast();
     axios
       .put(IP.API + "state/" + info.id, body, {
         headers: {
@@ -46,12 +48,13 @@ const State = () => {
         },
       })
       .then((res) => {
-        console.log(res.data);
+        UpdateToastInfo(id,res.data,'success');
         closeEditPage();
         getStateList();
       })
       .catch((error) => {
-        console.error(error);
+        // console.error(error);
+        UpdateToastInfo(id,'Data not updated','error');
         closeEditPage();
       });
   };
@@ -75,6 +78,7 @@ const State = () => {
     );
 
     if (userConfirmed) {
+      const id = LoadingToast();
       axios
         .delete(IP.API + "state/" + info.StateId, {
           headers: {
@@ -83,10 +87,12 @@ const State = () => {
         })
         .then((res) => {
           console.log(res.data);
+          UpdateToastInfo(id,res.data,'success');
           getStateList();
         })
         .catch((error) => {
-          console.error(error);
+          // console.error(error);
+          UpdateToastInfo(id,'Data Not Deleted!','error');
         });
     }
   };

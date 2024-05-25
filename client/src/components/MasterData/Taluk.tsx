@@ -4,6 +4,7 @@ import axios from "axios";
 import { IP } from "../utils/IP";
 import { EditInfo, EditinfoInterface } from "./DataEntry/EditInfo";
 import { getToken } from "../utils/getToken";
+import { LoadingToast, UpdateToastInfo } from "../utils/CustomeToast";
 
 export interface TalukInterface {
   TalukId: number;
@@ -44,6 +45,7 @@ const Taluk = () => {
     );
 
     if (userConfirmed) {
+      const id = LoadingToast();
       axios
         .delete(IP.API + "taluk/" + info.TalukId,{
           headers: {
@@ -51,11 +53,11 @@ const Taluk = () => {
           },
         })
         .then((res) => {
-          console.log(res.data);
+          UpdateToastInfo(id,res.data,'success');
           getTalukList();
         })
         .catch((error) => {
-          console.error(error);
+         UpdateToastInfo(id,'Data Not Deleted!','error');
         });
     }
   };
@@ -63,6 +65,7 @@ const Taluk = () => {
     const body = {
       talukName: info.name,
     };
+    const id = LoadingToast();
     axios
       .put(IP.API + "taluk/" + info.id, body,{
         headers: {
@@ -70,12 +73,12 @@ const Taluk = () => {
         },
       })
       .then((res) => {
-        console.log(res.data);
+        UpdateToastInfo(id,res.data,'success');
         closeEditPage();
         getTalukList();
       })
       .catch((error) => {
-        console.error(error);
+        UpdateToastInfo(id,'Data Not Updated!','error');
         closeEditPage();
       });
   };

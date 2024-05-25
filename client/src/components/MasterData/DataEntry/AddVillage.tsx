@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { IP } from "../../utils/IP";
 import { StateInterface } from "../State";
 import { getToken } from "../../utils/getToken";
+import { LoadingToast, UpdateToastInfo, WarningToast } from "../../utils/CustomeToast";
 
 interface props {
   closeAddComponent: () => void;
@@ -95,9 +96,11 @@ export const AddVillage: React.FC<props> = ({ closeAddComponent }) => {
   };
   const handleAddBtn = () => {
     if(selectedState ==='select' || selectedDistrict ==='select' || selectedCity==='select'|| selectedTaluk==='select'){
+      WarningToast("Please Select");
       return ;
     }
     if(villageNameInput.current?.value === ''){
+      WarningToast("Please Enter Village Name");
       return;
     }
     const body = {
@@ -107,6 +110,7 @@ export const AddVillage: React.FC<props> = ({ closeAddComponent }) => {
       selectedCity: selectedCity,
       selectedTaluk: selectedTaluk,
     };
+    const id = LoadingToast();
     axios
       .post(IP.API + "addNewVillage", body,{
         headers: {
@@ -114,11 +118,11 @@ export const AddVillage: React.FC<props> = ({ closeAddComponent }) => {
         },
       })
       .then((res) => {
-        console.log(res.data);
+        UpdateToastInfo(id,res.data,'success');
         closeAddComponent();
       })
       .catch((err) => {
-        console.log(err);
+        UpdateToastInfo(id,"Data Not Added",'error');
         closeAddComponent();
       });
   };

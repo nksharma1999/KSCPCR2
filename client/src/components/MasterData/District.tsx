@@ -5,6 +5,7 @@ import axios from "axios";
 import { IP } from "../utils/IP";
 import { EditInfo, EditinfoInterface } from "./DataEntry/EditInfo";
 import { getToken } from "../utils/getToken";
+import { LoadingToast, UpdateToastInfo } from "../utils/CustomeToast";
 
 export interface DistrictInterface {
   StateId: number;
@@ -44,6 +45,7 @@ const District = () => {
     );
 
     if (userConfirmed) {
+      const id  = LoadingToast();
       axios
         .delete(IP.API + "district/" + info.DistrictId,{
           headers: {
@@ -51,11 +53,12 @@ const District = () => {
           },
         })
         .then((res) => {
-          console.log(res.data);
+          UpdateToastInfo(id,res.data,'success');
           getDistrictList();
         })
         .catch((error) => {
-          console.error(error);
+          // console.error(error);
+          UpdateToastInfo(id,'Data not deleted!','error')
         });
     }
   };
@@ -63,6 +66,7 @@ const District = () => {
     const body = {
       districtName: info.name,
     };
+    const id = LoadingToast();
     axios
       .put(IP.API + "district/" + info.id, body,{
         headers: {
@@ -70,12 +74,13 @@ const District = () => {
         },
       })
       .then((res) => {
-        console.log(res.data);
+        UpdateToastInfo(id,res.data,'success');
         closeEditPage();
         getDistrictList();
       })
       .catch((error) => {
-        console.error(error);
+        // console.error(error);
+        UpdateToastInfo(id,'Data not updated','error');
         closeEditPage();
       });
   };

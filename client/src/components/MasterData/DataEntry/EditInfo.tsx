@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from "react";
+import { WarningToast } from "../../utils/CustomeToast";
 
 export interface EditinfoInterface {
   id: number;
@@ -25,6 +26,8 @@ export const EditInfo: React.FC<props> = ({
         id: info.id,
         name: stateNameInput.current?.value,
       });
+    }else{
+      WarningToast(`Please Enter ${title} Name`);
     }
   };
   useEffect(() => {

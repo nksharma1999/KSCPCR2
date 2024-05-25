@@ -19,7 +19,7 @@ export const dbGetUser = (username) => {
     sqlRequest()
       .then((request) => {
         request.query(
-          `SELECT Name,HashPassword,UserType from UserDetails where Username = '${username}';`,
+          `SELECT Name,HashPassword,UserType,UserId from UserDetails where Username = '${username}';`,
           (error, result) => {
             if (error) {
               console.error(error);
@@ -59,6 +59,28 @@ export const dbCreateUser = (data, hashPass) => {
   });
 };
 //Filter Master Info
+export const dbGetFilterVillageList = (talukId) => {
+  return new Promise(async (resolve, reject) => {
+    sqlRequest()
+      .then((request) => {
+        request.query(
+          `SELECT Village,VillageId from Village where TalukId = ${talukId};`,
+          (error, result) => {
+            if (error) {
+              console.error(error);
+              reject("Db Query Error");
+            } else {
+              resolve(result);
+            }
+          }
+        );
+      })
+      .catch((error) => {
+        console.error("Function Location (dbGetFilterVillageList)", error);
+        reject("Server Error");
+      });
+  });
+};
 export const dbGetFilterTalukList = (cityId) => {
   return new Promise(async (resolve, reject) => {
     sqlRequest()
@@ -103,6 +125,38 @@ export const dbGetFilterCityList = (districtId) => {
       });
   });
 };
+export const dbGetFilterCityBtStateList = (stateId) => {
+  return new Promise(async (resolve, reject) => {
+    sqlRequest()
+      .then((request) => {
+        request.query(
+          `SELECT 
+          City.CityId,
+          City.City
+          FROM 
+          City
+          INNER JOIN 
+          District ON City.DistrictId = District.DistrictId
+          INNER JOIN 
+          State ON District.StateId = State.StateId
+          WHERE 
+          State.StateId = ${stateId};`,
+          (error, result) => {
+            if (error) {
+              console.error(error);
+              reject("Db Query Error");
+            } else {
+              resolve(result);
+            }
+          }
+        );
+      })
+      .catch((error) => {
+        console.error("Function Location (dbGetFilterCityBtStateList)", error);
+        reject("Server Error");
+      });
+  });
+};
 export const dbGetFilterDistrictList = (stateId) => {
   return new Promise(async (resolve, reject) => {
     sqlRequest()
@@ -125,6 +179,7 @@ export const dbGetFilterDistrictList = (stateId) => {
       });
   });
 };
+
 //Case Details Update
 export const dbUpdatePdf = (id, pdfIdsMap, pdfs) => {
   let query = "update DocumentStorageLink set ";

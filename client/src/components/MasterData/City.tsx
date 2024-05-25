@@ -5,6 +5,7 @@ import axios from "axios";
 import { IP } from "../utils/IP";
 import { EditInfo, EditinfoInterface } from "./DataEntry/EditInfo";
 import { getToken } from "../utils/getToken";
+import { LoadingToast, UpdateToastInfo } from "../utils/CustomeToast";
 
 interface CityInterface {
   CityId: number;
@@ -45,6 +46,8 @@ const City = () => {
     );
 
     if (userConfirmed) {
+
+      const id =  LoadingToast();
       axios
         .delete(IP.API + "city/" + info.CityId, {
           headers: {
@@ -52,11 +55,12 @@ const City = () => {
           },
         })
         .then((res) => {
-          console.log(res.data);
+          UpdateToastInfo(id,res.data,'success');
           getCityList();
         })
         .catch((error) => {
-          console.error(error);
+          // console.error(error);
+          UpdateToastInfo(id,'Data Not Deleted!','error')
         });
     }
   };
@@ -64,6 +68,7 @@ const City = () => {
     const body = {
       cityName: info.name,
     };
+    const id = LoadingToast();
     axios
       .put(IP.API + "city/" + info.id, body, {
         headers: {
@@ -71,12 +76,13 @@ const City = () => {
         },
       })
       .then((res) => {
-        console.log(res.data);
+        UpdateToastInfo(id,res.data,'success');
         closeEditPage();
         getCityList();
       })
       .catch((error) => {
-        console.error(error);
+        // console.error(error);
+        UpdateToastInfo(id,'Data Not Updated!','error');
         closeEditPage();
       });
   };

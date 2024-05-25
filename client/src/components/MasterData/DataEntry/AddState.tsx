@@ -3,6 +3,7 @@ import axios from "axios";
 import { useRef, useState } from "react";
 import { IP } from "../../utils/IP";
 import { getToken } from "../../utils/getToken";
+import { LoadingToast, UpdateToastInfo, WarningToast } from "../../utils/CustomeToast";
 
 interface props {
   closeAddComponent: () => void;
@@ -14,20 +15,23 @@ export const AddState: React.FC<props> = ({
   const stateNameInput= useRef<HTMLInputElement>(null);
   const handleAddBtn =() =>{
     if(stateNameInput.current?.value ===''){
+      WarningToast("Please Enter State Name")
       return;
     }
     const body={
       stateName: stateNameInput.current?.value,
     }
+    const id = LoadingToast("Processing...");
     axios.post(IP.API +'addNewState', body,{
       headers: {
         "x-access-token": getToken(),
       },
     }).then(res=>{
       console.log(res.data);
+      UpdateToastInfo(id,res.data,'success');
       closeAddComponent();
     }).catch(err=>{
-      console.log(err);
+      UpdateToastInfo(id,"Data Not Added","error");
       closeAddComponent();
     })
   }

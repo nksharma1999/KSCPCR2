@@ -19,7 +19,7 @@ import {updateCaseManagementInfo} from '../controller/caseInfoUpdate/updateCaseM
 import {updatefollowUpInfo} from '../controller/caseInfoUpdate/updatefollowUpInfo.js';
 import {getCaseList} from '../controller/Dashboard/getCaselist.js';
 import {getCaseDetails} from '../controller/Dashboard/getCaseDetails.js';
-import {getFilterDistrictList,getFilterCityList,getFilterTalukList} from '../controller/masterData/address/filteredInfo.js';
+import {getFilterDistrictList,getFilterCityList,getFilterTalukList,getCityListByState,getFilterVillageList} from '../controller/masterData/address/filteredInfo.js';
 import {login,isUserLogin} from '../controller/Auth/login.js';
 import {verifyJWT} from '../controller/Auth/verifyJWT.js';
 import {createUser} from '../controller/Auth/createUser.js'
@@ -85,4 +85,6 @@ userRoutes.delete("/Jurisdiction/:id",verifyJWT,removeJurisdiction);
 userRoutes.get("/district/filter/:stateId",verifyJWT,getFilterDistrictList)
 userRoutes.get("/city/filter/:districtId",verifyJWT,getFilterCityList)
 userRoutes.get("/taluk/filter/:cityId",verifyJWT,getFilterTalukList)
+userRoutes.get("/village/filter/:talukId",verifyJWT,getFilterVillageList)
+userRoutes.get('/city/filterByStateId/:stateId',verifyJWT,getCityListByState);
 export default userRoutes;

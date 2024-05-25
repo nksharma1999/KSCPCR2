@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { IP } from "../../utils/IP";
 import { StateInterface } from "../State";
 import { getToken } from "../../utils/getToken";
+import { LoadingToast, UpdateToastInfo, WarningToast } from "../../utils/CustomeToast";
 
 interface props {
   closeAddComponent: () => void;
@@ -17,12 +18,14 @@ export const AddDistrict: React.FC<props> = ({ closeAddComponent }) => {
   };
   const handleAddBtn = () => {
     if (districtNameInput.current?.value === "" || selectedState === "select") {
+      WarningToast("Please Select Data");
       return;
     }
     const body = {
       districtName: districtNameInput.current?.value,
       selectedState: selectedState,
     };
+    const id  = LoadingToast();
     axios
       .post(IP.API + "addNewDistrict", body,{
         headers: {
@@ -30,11 +33,12 @@ export const AddDistrict: React.FC<props> = ({ closeAddComponent }) => {
         },
       })
       .then((res) => {
-        console.log(res.data);
+        UpdateToastInfo(id,res.data,'success');
         closeAddComponent();
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
+        UpdateToastInfo(id,'Data Not Added','error');
         closeAddComponent();
       });
   };

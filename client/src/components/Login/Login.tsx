@@ -3,6 +3,7 @@ import "./login.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { IP } from "../utils/IP";
+import { LoadingToast, UpdateToastInfo } from "../utils/CustomeToast";
 interface props {
   updateAuth: (data: any) => void;
 }
@@ -14,6 +15,7 @@ export const Login: React.FC<props> = ({ updateAuth }) => {
   const currentPath = location.pathname;
   const navigate = useNavigate();
   const handleLoginBtn = () => {
+    const id = LoadingToast("Hello")
     const body = {
       username: userName.current?.value,
       password: password.current?.value,
@@ -23,10 +25,11 @@ export const Login: React.FC<props> = ({ updateAuth }) => {
       .then((res) => {
         localStorage.setItem("token", res.data.token);
         updateAuth(res.data.isLogin);
+        UpdateToastInfo(id,'login successful','success');
         navigate(currentPath);
       })
       .catch((error) => {
-        console.error(error);
+        UpdateToastInfo(id,error.response.data,'error');
       });
   };
   return (

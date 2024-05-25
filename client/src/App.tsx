@@ -1,4 +1,5 @@
 import React, { Suspense, lazy, useEffect, useState } from "react";
+import 'react-toastify/dist/ReactToastify.css';
 import MainLayout from "./Layout/MainLayout";
 import { Loading } from "./components/utils/Loading";
 import { Outlet, Route, Routes, useNavigate } from "react-router-dom";

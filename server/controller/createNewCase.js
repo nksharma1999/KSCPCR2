@@ -3,6 +3,7 @@ import { v4 } from "uuid";
 import { dbAddNewCase } from "../dbOperation/dbAddNewCase.js";
 const pdfs = ["schoolRecordsPdf","courtOrdersPdf","judgementsPdf","witnessStatementsPdf","photographsPdf","testimonyPdf","policeReportsPdf","medicalReportsPdf","protectionOrderPdf", "placementOrderPdf","restrainingOrderPdf"];
 export const createNewCase = (req, res) => {
+  
   const pdfIdsMap = new Map();
   pdfs.forEach((filesName) => {
     let pdfId = "";

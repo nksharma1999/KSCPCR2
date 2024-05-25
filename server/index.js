@@ -5,6 +5,7 @@ import path from 'path';
 import dotenv from 'dotenv';
 import {initializeDbConnection} from './db/dbConnection.js';
 import {dbConnection} from './db/dbSequelizeConnection.js';
+import {verifyJWT} from './controller/Auth/verifyJWT.js'
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT | 3001;
@@ -12,10 +13,10 @@ await initializeDbConnection();
 await dbConnection();
 // Serve static files from the 'upload' directory
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
-app.use("/api/pdf",express.static(path.join(__dirname, 'uploads')));
 
 app.use(cors());
 app.use(express.json());
+app.use("/api/v1/pdf",verifyJWT,express.static(path.join(__dirname, 'uploads')));
 
 
 app.use('/api/v1',userRoutes);

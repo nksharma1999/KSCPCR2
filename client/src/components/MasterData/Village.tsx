@@ -4,6 +4,7 @@ import axios from "axios";
 import { IP } from "../utils/IP";
 import { EditInfo, EditinfoInterface } from "./DataEntry/EditInfo";
 import { getToken } from "../utils/getToken";
+import { LoadingToast, UpdateToastInfo } from "../utils/CustomeToast";
 
 export interface VillageInterface {
   VillageId: number;
@@ -25,8 +26,8 @@ const Village = () => {
   };
   const handleEdit = (info: VillageInterface) => {
     setEditInfo({
-      id:info.VillageId,
-      name:info.Village
+      id: info.VillageId,
+      name: info.Village,
     });
     setShowEditPage(true);
   };
@@ -45,18 +46,19 @@ const Village = () => {
     );
 
     if (userConfirmed) {
+      const id = LoadingToast();
       axios
-        .delete(IP.API + "village/" + info.VillageId,{
+        .delete(IP.API + "village/" + info.VillageId, {
           headers: {
             "x-access-token": getToken(),
           },
         })
         .then((res) => {
-          console.log(res.data);
+          UpdateToastInfo(id, res.data, "success");
           getVillageList();
         })
         .catch((error) => {
-          console.error(error);
+          UpdateToastInfo(id, "Data Not Deleted!", "error");
         });
     }
   };
@@ -64,25 +66,26 @@ const Village = () => {
     const body = {
       villageName: info.name,
     };
+    const id = LoadingToast();
     axios
-      .put(IP.API + "village/" + info.id, body,{
+      .put(IP.API + "village/" + info.id, body, {
         headers: {
           "x-access-token": getToken(),
         },
       })
       .then((res) => {
-        console.log(res.data);
+        UpdateToastInfo(id, res.data, "success");
         closeEditPage();
         getVillageList();
       })
       .catch((error) => {
-        console.error(error);
+        UpdateToastInfo(id, "Data Not Updated!", "error");
         closeEditPage();
       });
   };
   const getVillageList = () => {
     axios
-      .get(IP.API + "village",{
+      .get(IP.API + "village", {
         headers: {
           "x-access-token": getToken(),
         },
@@ -173,7 +176,7 @@ const Village = () => {
                           <i className="fa-solid fa-pen-to-square"></i>
                         </button>
                         <button
-                        onClick={()=> handleDeleteState(val)}
+                          onClick={() => handleDeleteState(val)}
                           className="btn"
                           style={{
                             backgroundColor: "white",

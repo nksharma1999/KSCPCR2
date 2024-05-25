@@ -4,6 +4,7 @@ export const verifyJWT = (req, res, next) => {
   if (token) {
     const data = verifyToken(token);
     if (data) {
+      req.userInfo = data
       next();
     } else {
       res.status(401).json("Token Invalid");

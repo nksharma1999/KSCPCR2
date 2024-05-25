@@ -3,8 +3,30 @@ import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { IP } from "../utils/IP";
 import { getToken } from "../utils/getToken";
-
+import {
+  InfoToast,
+  LoadingToast,
+  UpdateToastInfo,
+  WarningToast,
+} from "../utils/CustomeToast";
+import { StateInterface } from "../MasterData/State";
+interface CityListInterface {
+  City: string;
+  CityId: number;
+}
+interface TalukListInterface {
+  Taluk: string;
+  TalukId: number;
+}
+interface VillageListInterface {
+  Village: string;
+  VillageId: number;
+}
 const AddNewCaseForm = () => {
+  const [StateList, setStateList] = useState<StateInterface[]>([]);
+  const [CityList, setCityList] = useState<CityListInterface[]>([]);
+  const [TalukList, setTalukList] = useState<TalukListInterface[]>([]);
+  const [VillageList, setVillageList] = useState<VillageListInterface[]>([]);
   //Handle Page Number and next Page
   const [pageNumber, setPageNumber] = useState<number>();
   const [progressWidth, setFormCompletePer] = useState(0);
@@ -56,14 +78,63 @@ const AddNewCaseForm = () => {
   const [selectedState, setSelectedState] = useState<string>("select");
   const handleStateChange = (e: any) => {
     setSelectedState(e.target.value);
+    if (e.target.value !== "select") {
+      axios
+        .get(IP.API + "city/filterByStateId/" + e.target.value, {
+          headers: {
+            "x-access-token": getToken(),
+          },
+        })
+        .then((res) => {
+          const data = res.data;
+          setSelectedCity("select");
+          setSelectedTaluk("select");
+          setCityList(data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
   };
   const [selectedCity, setSelectedCity] = useState<string>("select");
   const handleCityChange = (e: any) => {
     setSelectedCity(e.target.value);
+    if (e.target.value !== "select") {
+      axios
+        .get(IP.API + "taluk/filter/" + e.target.value, {
+          headers: {
+            "x-access-token": getToken(),
+          },
+        })
+        .then((res) => {
+          const data = res.data;
+          setSelectedTaluk("select");
+          setTalukList(data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
   };
   const [selectedTaluk, setSelectedTaluk] = useState<string>("select");
   const handleTalukChange = (e: any) => {
     setSelectedTaluk(e.target.value);
+    if (e.target.value !== "select") {
+      axios
+        .get(IP.API + "village/filter/" + e.target.value, {
+          headers: {
+            "x-access-token": getToken(),
+          },
+        })
+        .then((res) => {
+          const data = res.data;
+          setSelectedVillage("select");
+          setVillageList(data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
   };
   const [selectedVillage, setSelectedVillage] = useState<string>("select");
   const handleVillageChange = (e: any) => {
@@ -96,9 +167,7 @@ const AddNewCaseForm = () => {
       selectedTaluk === "select" ||
       selectedVillage === "select"
     ) {
-      alert(
-        "Please fill out all fields and select options in child information."
-      );
+      WarningToast("Please fill out all fields and select options");
       return false;
     }
     return true;
@@ -106,7 +175,7 @@ const AddNewCaseForm = () => {
 
   const handleChildInformation = () => {
     if (validateChildInformation()) {
-      alert("child information Saved!");
+      InfoToast("Child information Saved!");
       handleNextBtn();
     }
   };
@@ -163,7 +232,7 @@ const AddNewCaseForm = () => {
       selectedCasePriority === "select" ||
       selectedCaseStatus === "select"
     ) {
-      alert("Please fill out all fields and select options in Case Details.");
+      WarningToast("Please fill out all fields and select options.");
       return false;
     }
     return true;
@@ -171,7 +240,7 @@ const AddNewCaseForm = () => {
 
   const handleCaseDetails = () => {
     if (validateCaseDetails()) {
-      alert("Case Details Saved!");
+      InfoToast("Case Details Saved!");
       handleNextBtn();
     }
   };
@@ -205,7 +274,7 @@ const AddNewCaseForm = () => {
       !respondentInput ||
       !legalAidDetailsInput
     ) {
-      alert("Please fill out all fields in Legal Representation.");
+      WarningToast("Please fill out all fields.");
       return false;
     }
     return true;
@@ -213,7 +282,7 @@ const AddNewCaseForm = () => {
 
   const handleLegalRepresentation = () => {
     if (validateLegalRepresentation()) {
-      alert("Legal Representation Saved!");
+      InfoToast("Legal Representation Saved!");
       handleNextBtn();
     }
   };
@@ -256,10 +325,10 @@ const AddNewCaseForm = () => {
   };
 
   const handleChildProtectionMeasures = () => {
-    if (validateChildProtectionMeasures()) {
-      alert("Child Protection Measures Saved!");
-      handleNextBtn();
-    }
+    // if (validateChildProtectionMeasures()) {
+    //   alert("Child Protection Measures Saved!");
+    // }
+    handleNextBtn();
   };
   //Handle Page Number 5 Inputs
   const [medicalReportsPdf, setMedicalReportsPdf] = useState<File | null>(null);
@@ -326,10 +395,10 @@ const AddNewCaseForm = () => {
   };
 
   const handleEvidence = () => {
-    if (validateEvidence()) {
-      alert("Evidence and Documentation Saved!");
-      handleNextBtn();
-    }
+    // if (validateEvidence()) {
+    //   alert("Evidence and Documentation Saved!");
+    // }
+    handleNextBtn();
   };
 
   //Handle Page Number 6 Inputs
@@ -366,9 +435,7 @@ const AddNewCaseForm = () => {
       !taskAssignmentInput ||
       !caseNotesandUpdatesInput
     ) {
-      alert(
-        "Please fill out all fields and select options in Case Management."
-      );
+      WarningToast("Please fill out all fields and select options.");
       return false;
     }
     return true;
@@ -376,7 +443,7 @@ const AddNewCaseForm = () => {
 
   const handleCaseManagement = () => {
     if (validatecaseManagement()) {
-      alert("Case Management Saved!");
+      InfoToast("Case Management Saved!");
       handleNextBtn();
     }
   };
@@ -406,10 +473,10 @@ const AddNewCaseForm = () => {
   };
 
   const handlecourtOrdersAndJudgements = () => {
-    if (validatecourtOrdersAndJudgements()) {
-      alert("Court Order and Judgements Saved!");
-      handleNextBtn();
-    }
+    // if (validatecourtOrdersAndJudgements()) {
+    //   alert("Court Order and Judgements Saved!");
+    // }
+    handleNextBtn();
   };
 
   //Handle Page Number 8 Inputs
@@ -472,6 +539,7 @@ const AddNewCaseForm = () => {
       "MonitoringFollowUp",
       JSON.stringify(MonitoringFollowUpData)
     );
+    const id = LoadingToast();
     axios
       .post(IP.API + "addNewCase", formData, {
         headers: {
@@ -481,11 +549,29 @@ const AddNewCaseForm = () => {
       })
       .then((res) => {
         console.log(res.data);
+        UpdateToastInfo(id, res.data.message, "success");
       })
       .catch((err) => {
-        console.log(err);
+        UpdateToastInfo(id, "Data Not Save", "error");
       });
   };
+  const getStateList = () => {
+    axios
+      .get(IP.API + "state", {
+        headers: {
+          "x-access-token": getToken(),
+        },
+      })
+      .then((data) => {
+        setStateList(data.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+  useEffect(() => {
+    getStateList();
+  }, []);
   return (
     <>
       <div
@@ -622,9 +708,13 @@ const AddNewCaseForm = () => {
                     onChange={handleStateChange}
                   >
                     <option value="select">--- Select State ---</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
+                    {StateList.map((val, index) => {
+                      return (
+                        <option key={index} value={val.StateId}>
+                          {val.State}
+                        </option>
+                      );
+                    })}
                   </select>
                   <label htmlFor="floatingSelect">State</label>
                 </div>
@@ -639,9 +729,13 @@ const AddNewCaseForm = () => {
                     onChange={handleCityChange}
                   >
                     <option value="select">--- Select City ---</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
+                    {CityList.map((val, index) => {
+                      return (
+                        <option key={index} value={val.CityId}>
+                          {val.City}
+                        </option>
+                      );
+                    })}
                   </select>
                   <label htmlFor="floatingSelect2">City</label>
                 </div>
@@ -656,9 +750,13 @@ const AddNewCaseForm = () => {
                     onChange={handleTalukChange}
                   >
                     <option value="select">--- Select Taluk ---</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
+                    {TalukList.map((val, index) => {
+                      return (
+                        <option key={index} value={val.TalukId}>
+                          {val.Taluk}
+                        </option>
+                      );
+                    })}
                   </select>
                   <label htmlFor="floatingSelect3">Taluk</label>
                 </div>
@@ -673,9 +771,13 @@ const AddNewCaseForm = () => {
                     onChange={handleVillageChange}
                   >
                     <option value="select">--- Select Village ---</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
+                    {VillageList.map((val, index) => {
+                      return (
+                        <option key={index} value={val.VillageId}>
+                          {val.Village}
+                        </option>
+                      );
+                    })}
                   </select>
                   <label htmlFor="floatingSelect3">Village</label>
                 </div>
