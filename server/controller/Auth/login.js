@@ -1,5 +1,7 @@
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import { dbGetUser } from "../../dbOperation/dbOperation.js";
+import {decryptData} from './createUser.js';
 dotenv.config();
 const secretKey = process.env.SECRET_KEY;
 export const login = (req, res) => {
@@ -8,23 +10,35 @@ export const login = (req, res) => {
     res.status(400).json("Enter Username / Password");
     return;
   }
-  if (username === "admin" && password === "1234") {
-    const payload = {
-      username: username,
-    };
-    const options = {
-      expiresIn: "24h", // Token will expire in 1 hour
-    };
-    const token = jwt.sign(payload, secretKey, options);
-    const response = {
-      token: token,
-      username: username,
-      isLogin: true,
-    };
-    res.status(200).json(response);
-  } else {
-    res.status(400).json("Username/Password Invalid");
-  }
+  dbGetUser(username)
+    .then((info) => {
+      if(info.recordset.length === 0){
+        res.status(400).json("Username/Password Invalid");
+        return;
+      }
+      const hashPass = info.recordset[0].HashPassword;
+      const aPass = decryptData(hashPass,process.env.KEY);
+      if (password === aPass) {
+        const payload = {
+          username: username,
+        };
+        const options = {
+          expiresIn: "24h", // Token will expire in 1 hour
+        };
+        const token = jwt.sign(payload, secretKey, options);
+        const response = {
+          token: token,
+          username: username,
+          isLogin: true,
+        };
+        res.status(200).json(response);
+      } else {
+        res.status(400).json("Username/Password Invalid");
+      }
+    })
+    .catch((error) => {
+      res.status(400).json(error);
+    });
 };
 
 export const isUserLogin = (req, res) => {

@@ -12,6 +12,52 @@ const sqlRequest = async () => {
     }
   });
 };
+
+//User
+export const dbGetUser = (username) => {
+  return new Promise(async (resolve, reject) => {
+    sqlRequest()
+      .then((request) => {
+        request.query(
+          `SELECT Name,HashPassword,UserType from UserDetails where Username = '${username}';`,
+          (error, result) => {
+            if (error) {
+              console.error(error);
+              reject("Db Query Error");
+            } else {
+              resolve(result);
+            }
+          }
+        );
+      })
+      .catch((error) => {
+        console.error("Function Location (dbGetUser)", error);
+        reject("Server Error");
+      });
+  });
+};
+export const dbCreateUser = (data, hashPass) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const pool = await getDbConnection();
+      const request = pool.request();
+      request.query(
+        `INSERT INTO UserDetails (Username,Name,HashPassword,UserType) VALUES ('${data.username}','${data.name}','${hashPass}','${data.userType}');`,
+        (error, result) => {
+          if (error) {
+            console.error(error);
+            reject("Db Query Error");
+          } else {
+            resolve("User Added");
+          }
+        }
+      );
+    } catch (error) {
+      console.error("Function Location (dbCreateUser)", error);
+      reject("Server Error");
+    }
+  });
+};
 //Filter Master Info
 export const dbGetFilterTalukList = (cityId) => {
   return new Promise(async (resolve, reject) => {
@@ -875,4 +921,27 @@ export const dbGetCaseDetails = async (id, callback) => {
   const pool = await getDbConnection();
   const request = pool.request();
   request.query(`SELECT * from CaseDetails where caseId = '${id}';`, callback);
+};
+
+export const dbGetDocInfo = (caseId) => {
+  return new Promise(async (resolve, reject) => {
+    sqlRequest()
+      .then((request) => {
+        request.query(
+          `SELECT schoolRecordsPdf,courtOrdersPdf,judgementsPdf,witnessStatementsPdf,photographsPdf,testimonyPdf,policeReportsPdf,medicalReportsPdf,protectionOrderPdf,placementOrderPdf,restrainingOrderPdf from DocumentStorageLink WHERE caseId = '${caseId}'`,
+          (error, result) => {
+            if (error) {
+              console.error(error);
+              reject("Db Query Error");
+            } else {
+              resolve(result);
+            }
+          }
+        );
+      })
+      .catch((error) => {
+        console.error("Function Location (dbGetDocInfo)", error);
+        reject("Server Error");
+      });
+  });
 };

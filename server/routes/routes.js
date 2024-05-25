@@ -22,17 +22,21 @@ import {getCaseDetails} from '../controller/Dashboard/getCaseDetails.js';
 import {getFilterDistrictList,getFilterCityList,getFilterTalukList} from '../controller/masterData/address/filteredInfo.js';
 import {login,isUserLogin} from '../controller/Auth/login.js';
 import {verifyJWT} from '../controller/Auth/verifyJWT.js';
+import {createUser} from '../controller/Auth/createUser.js'
+import {getDocInfo} from '../controller/Dashboard/getDocInfo.js';
 const userRoutes = express.Router();
 const fileUpload = multer({ dest: "uploads/" });
 
 //Auth
 userRoutes.post('/login',login);
 userRoutes.post('/auth',isUserLogin);
+userRoutes.post("/register",verifyJWT,createUser);
 //Case Info
 userRoutes.post("/addNewCase",verifyJWT,fileUpload.fields(createNewCasePdfType),createNewCase)
 //Dashboard
 userRoutes.get("/caselist",verifyJWT,getCaseList);
 userRoutes.get('/case/:id',verifyJWT,getCaseDetails);
+userRoutes.get("/case/docLink/:id",verifyJWT,getDocInfo);
 userRoutes.put("/case/childInformation/:id",verifyJWT,updateChildInfo)
 userRoutes.put("/case/caseDetails/:id",verifyJWT,updateCaseDetails)
 userRoutes.put("/case/legal/:id",verifyJWT,updateLegalRepInfo)
@@ -41,6 +45,7 @@ userRoutes.put("/case/follow-up/:id",verifyJWT,updatefollowUpInfo)
 userRoutes.put("/case/protectionMeasures/:id",verifyJWT,fileUpload.fields(createNewCasePdfType),updateProtectionMeasuresPdf)
 userRoutes.put("/case/evidence/:id",verifyJWT,fileUpload.fields(createNewCasePdfType),updateEvidencePdf)
 userRoutes.put("/case/judgements/:id",verifyJWT,fileUpload.fields(createNewCasePdfType),updateJudgementsPdf)
+
 //State
 userRoutes.get("/state",verifyJWT,getStateList);
 userRoutes.post("/addNewState",verifyJWT,addNewState);

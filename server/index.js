@@ -4,10 +4,12 @@ import userRoutes from './routes/routes.js';
 import path from 'path';
 import dotenv from 'dotenv';
 import {initializeDbConnection} from './db/dbConnection.js';
+import {dbConnection} from './db/dbSequelizeConnection.js';
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT | 3001;
 await initializeDbConnection();
+await dbConnection();
 // Serve static files from the 'upload' directory
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 app.use("/api/pdf",express.static(path.join(__dirname, 'uploads')));
