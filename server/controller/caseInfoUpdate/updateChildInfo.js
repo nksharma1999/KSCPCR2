@@ -1,8 +1,9 @@
 import { dbUpdateChildInfo } from "../../dbOperation/dbOperation.js";
 export const updateChildInfo = (req, res) => {
   const { id } = req.params;
+  const userInfo = req.userInfo;
   if (id) {
-    dbUpdateChildInfo(req.params, req.body)
+    dbUpdateChildInfo(req.params, req.body,userInfo)
       .then((info) => {
         res.status(200).json(info);
       })

@@ -1,8 +1,9 @@
 import { dbUpdateCaseManagementInfo } from "../../dbOperation/dbOperation.js";
 export const updateCaseManagementInfo = (req, res) => {
   const { id } = req.params;
+  const userInfo = req.userInfo
   if (id) {
-    dbUpdateCaseManagementInfo(id, req.body)
+    dbUpdateCaseManagementInfo(id, req.body,userInfo)
       .then((info) => {
         res.status(200).json(info);
       })

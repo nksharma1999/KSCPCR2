@@ -181,7 +181,7 @@ export const dbGetFilterDistrictList = (stateId) => {
 };
 
 //Case Details Update
-export const dbUpdatePdf = (id, pdfIdsMap, pdfs) => {
+export const dbUpdatePdf = (id, pdfIdsMap, pdfs,userInfo) => {
   let query = "update DocumentStorageLink set ";
   for (let i = 0; i < pdfs.length - 1; i++) {
     query = query + pdfs[i] + "=" + `'${pdfIdsMap.get(pdfs[i])}',`;
@@ -190,7 +190,7 @@ export const dbUpdatePdf = (id, pdfIdsMap, pdfs) => {
     query +
     pdfs[pdfs.length - 1] +
     "=" +
-    `'${pdfIdsMap.get(pdfs[pdfs.length - 1])}'`;
+    `'${pdfIdsMap.get(pdfs[pdfs.length - 1])}',updatedBy=${userInfo.UserId}`;
   query = query + ` where caseId = '${id}';`;
   return new Promise(async (resolve, reject) => {
     sqlRequest()
@@ -210,14 +210,15 @@ export const dbUpdatePdf = (id, pdfIdsMap, pdfs) => {
       });
   });
 };
-export const dbUpdatefollowUpInfo = (id, data) => {
+export const dbUpdatefollowUpInfo = (id, data,userInfo) => {
   return new Promise(async (resolve, reject) => {
     sqlRequest()
       .then((request) => {
         request.query(
           `update CaseDetails set 
           postCaseMonitoringInput ='${data.postCaseMonitoringInput}',
-          followUpActionInput ='${data.followUpActionInput}'
+          followUpActionInput ='${data.followUpActionInput}',
+          updatedBy=${userInfo.UserId}
           where caseId = '${id}' `,
           (error) => {
             if (error) {
@@ -235,7 +236,7 @@ export const dbUpdatefollowUpInfo = (id, data) => {
       });
   });
 };
-export const dbUpdateCaseManagementInfo = (id, data) => {
+export const dbUpdateCaseManagementInfo = (id, data,userInfo) => {
   return new Promise(async (resolve, reject) => {
     sqlRequest()
       .then((request) => {
@@ -245,7 +246,8 @@ export const dbUpdateCaseManagementInfo = (id, data) => {
           nextHearingDate ='${data.nextHearingDateInput}',
           nextStepsandAction='${data.nextStepsandActionInput}',
           taskAssignment='${data.taskAssignmentInput}',
-          caseNotesandUpdatesInput='${data.caseNotesandUpdatesInput}'
+          caseNotesandUpdatesInput='${data.caseNotesandUpdatesInput}',
+          updatedBy=${userInfo.UserId}
           where caseId = '${id}' `,
           (error) => {
             if (error) {
@@ -263,7 +265,7 @@ export const dbUpdateCaseManagementInfo = (id, data) => {
       });
   });
 };
-export const dbUpdateLegalRepInfo = (id, data) => {
+export const dbUpdateLegalRepInfo = (id, data,userInfo) => {
   return new Promise(async (resolve, reject) => {
     sqlRequest()
       .then((request) => {
@@ -272,7 +274,8 @@ export const dbUpdateLegalRepInfo = (id, data) => {
           lawyer ='${data.lawyerInput}',
           petitioner ='${data.petitionerInput}',
           respondent='${data.respondentInput}',
-          legalAidDetails='${data.legalAidDetailsInput}'
+          legalAidDetails='${data.legalAidDetailsInput}',
+          updatedBy=${userInfo.UserId}
           where caseId = '${id}' `,
           (error) => {
             if (error) {
@@ -290,7 +293,7 @@ export const dbUpdateLegalRepInfo = (id, data) => {
       });
   });
 };
-export const dbUpdateCaseDetails = (id, data) => {
+export const dbUpdateCaseDetails = (id, data,userInfo) => {
   return new Promise(async (resolve, reject) => {
     sqlRequest()
       .then((request) => {
@@ -302,7 +305,8 @@ export const dbUpdateCaseDetails = (id, data) => {
           jurisdiction='${data.jurisdictionInput}',
           caseType='${data.selectedCaseType}',
           casePriority='${data.selectedCasePriority}',
-          caseStatus='${data.selectedCaseStatus}'
+          caseStatus='${data.selectedCaseStatus}',
+          updatedBy=${userInfo.UserId}
           where caseId = '${id}' `,
           (error) => {
             if (error) {
@@ -320,7 +324,7 @@ export const dbUpdateCaseDetails = (id, data) => {
       });
   });
 };
-export const dbUpdateChildInfo = (id, data) => {
+export const dbUpdateChildInfo = (id, data,userInfo) => {
   return new Promise(async (resolve, reject) => {
     sqlRequest()
       .then((request) => {
@@ -338,7 +342,7 @@ export const dbUpdateChildInfo = (id, data) => {
           )},
           taluk=${parseInt(data.selectedTaluk)},village=${parseInt(
             data.selectedVillage
-          )}  where caseId = '${id.id}' `,
+          )},updatedBy=${userInfo.UserId}  where caseId = '${id.id}' `,
           (error) => {
             if (error) {
               console.error("Error Data", error);

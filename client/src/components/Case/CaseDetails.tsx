@@ -416,6 +416,7 @@ const CaseDetails = () => {
       })
       .then((res) => {
         UpdateToastInfo(toastId, res.data, "success");
+        getDocList();
       })
       .catch((err) => {
         UpdateToastInfo(toastId, "File Not Updated", "error");
@@ -505,6 +506,7 @@ const CaseDetails = () => {
       })
       .then((res) => {
         UpdateToastInfo(toastId, res.data, "success");
+        getDocList();
       })
       .catch((err) => {
         UpdateToastInfo(toastId, "File Not Updated", "error");
@@ -624,6 +626,7 @@ const CaseDetails = () => {
       })
       .then((res) => {
         UpdateToastInfo(toastId, res.data, "success");
+        getDocList();
       })
       .catch((err) => {
         UpdateToastInfo(toastId, "File Not Updated", "error");
@@ -1373,12 +1376,19 @@ const CaseDetails = () => {
                           </button>
                         </span>
                       </div>
-                      {pdfList?.protectionOrderPdf}
+                      {/* {pdfList?.protectionOrderPdf} */}
                     </div>
                   ) : (
                     <div>
-                      <div>Protection Orders</div>
-                      <i className="fa-solid fa-upload"></i>
+                      <div>
+                        Protection Orders{" "}
+                        <span onClick={() => handlEdit(4)}>
+                          <i
+                            style={{ color: "red", marginLeft: "10px" }}
+                            className="fa-solid fa-upload fa-bounce"
+                          ></i>
+                        </span>
+                      </div>
                     </div>
                   )}
                 </div>
@@ -1418,12 +1428,19 @@ const CaseDetails = () => {
                           </button>
                         </span>
                       </div>
-                      {pdfList?.placementOrderPdf}
+                      {/* {pdfList?.placementOrderPdf} */}
                     </div>
                   ) : (
                     <div>
-                      <div>Placement Orders</div>
-                      <i className="fa-solid fa-upload"></i>
+                      <div>
+                        Placement Orders{" "}
+                        <span onClick={() => handlEdit(4)}>
+                          <i
+                            style={{ color: "red", marginLeft: "10px" }}
+                            className="fa-solid fa-upload fa-bounce"
+                          ></i>
+                        </span>
+                      </div>
                     </div>
                   )}
                 </div>
@@ -1463,12 +1480,19 @@ const CaseDetails = () => {
                           </button>
                         </span>
                       </div>
-                      {pdfList?.restrainingOrderPdf}
+                      {/* {pdfList?.restrainingOrderPdf} */}
                     </div>
                   ) : (
                     <div>
-                      <div>Restraining Order</div>
-                      <i className="fa-solid fa-upload"></i>
+                      <div>
+                        Restraining Order{" "}
+                        <span onClick={() => handlEdit(4)}>
+                          <i
+                            style={{ color: "red", marginLeft: "10px" }}
+                            className="fa-solid fa-upload fa-bounce"
+                          ></i>
+                        </span>
+                      </div>
                     </div>
                   )}
                 </div>
@@ -1540,12 +1564,19 @@ const CaseDetails = () => {
                           </button>
                         </span>
                       </div>
-                      {pdfList?.medicalReportsPdf}
+                      {/* {pdfList?.medicalReportsPdf} */}
                     </div>
                   ) : (
                     <div>
-                      <div>Medical Reports</div>
-                      <i className="fa-solid fa-upload"></i>
+                      <div>
+                        Medical Reports{" "}
+                        <span onClick={() => handlEdit(5)}>
+                          <i
+                            style={{ color: "red", marginLeft: "10px" }}
+                            className="fa-solid fa-upload fa-bounce"
+                          ></i>
+                        </span>
+                      </div>
                     </div>
                   )}
                 </div>
@@ -1585,12 +1616,19 @@ const CaseDetails = () => {
                           </button>
                         </span>
                       </div>
-                      {pdfList?.witnessStatementsPdf}
+                      {/* {pdfList?.witnessStatementsPdf} */}
                     </div>
                   ) : (
                     <div>
-                      <div>Witness Statements</div>
-                      <i className="fa-solid fa-upload"></i>
+                      <div>
+                        Witness Statements{" "}
+                        <span onClick={() => handlEdit(5)}>
+                          <i
+                            style={{ color: "red", marginLeft: "10px" }}
+                            className="fa-solid fa-upload fa-bounce"
+                          ></i>
+                        </span>
+                      </div>
                     </div>
                   )}
                 </div>
@@ -1630,12 +1668,19 @@ const CaseDetails = () => {
                           </button>
                         </span>
                       </div>
-                      {pdfList?.policeReportsPdf}
+                      {/* {pdfList?.policeReportsPdf} */}
                     </div>
                   ) : (
                     <div>
-                      <div>Police Reports</div>
-                      <i className="fa-solid fa-upload"></i>
+                      <div>
+                        Police Reports{" "}
+                        <span onClick={() => handlEdit(5)}>
+                          <i
+                            style={{ color: "red", marginLeft: "10px" }}
+                            className="fa-solid fa-upload fa-bounce"
+                          ></i>
+                        </span>
+                      </div>
                     </div>
                   )}
                 </div>
@@ -1675,12 +1720,19 @@ const CaseDetails = () => {
                           </button>
                         </span>
                       </div>
-                      {pdfList?.photographsPdf}
+                      {/* {pdfList?.photographsPdf} */}
                     </div>
                   ) : (
                     <div>
-                      <div>Photographs or Evidence</div>
-                      <i className="fa-solid fa-upload"></i>
+                      <div>
+                        Photographs or Evidence{" "}
+                        <span onClick={() => handlEdit(5)}>
+                          <i
+                            style={{ color: "red", marginLeft: "10px" }}
+                            className="fa-solid fa-upload fa-bounce"
+                          ></i>
+                        </span>
+                      </div>
                     </div>
                   )}
                 </div>
@@ -1718,12 +1770,19 @@ const CaseDetails = () => {
                           </button>
                         </span>
                       </div>
-                      {pdfList?.testimonyPdf}
+                      {/* {pdfList?.testimonyPdf} */}
                     </div>
                   ) : (
                     <div>
-                      <div>Child's Testimony</div>
-                      <i className="fa-solid fa-upload"></i>
+                      <div>
+                        Child's Testimony{" "}
+                        <span onClick={() => handlEdit(5)}>
+                          <i
+                            style={{ color: "red", marginLeft: "10px" }}
+                            className="fa-solid fa-upload fa-bounce"
+                          ></i>
+                        </span>
+                      </div>
                     </div>
                   )}
                 </div>
@@ -1763,12 +1822,19 @@ const CaseDetails = () => {
                           </button>
                         </span>
                       </div>
-                      {pdfList?.schoolRecordsPdf}
+                      {/* {pdfList?.schoolRecordsPdf} */}
                     </div>
                   ) : (
                     <div>
-                      <div>School Records</div>
-                      <i className="fa-solid fa-upload"></i>
+                      <div>
+                        School Records{" "}
+                        <span onClick={() => handlEdit(5)}>
+                          <i
+                            style={{ color: "red", marginLeft: "10px" }}
+                            className="fa-solid fa-upload fa-bounce"
+                          ></i>
+                        </span>
+                      </div>
                     </div>
                   )}
                 </div>
@@ -1941,12 +2007,19 @@ const CaseDetails = () => {
                           </button>
                         </span>
                       </div>
-                      {pdfList?.courtOrdersPdf}
+                      {/* {pdfList?.courtOrdersPdf} */}
                     </div>
                   ) : (
                     <div>
-                      <div>Court Orders</div>
-                      <i className="fa-solid fa-upload"></i>
+                      <div>
+                        Court Orders{" "}
+                        <span onClick={() => handlEdit(7)}>
+                          <i
+                            style={{ color: "red", marginLeft: "10px" }}
+                            className="fa-solid fa-upload fa-bounce"
+                          ></i>
+                        </span>
+                      </div>
                     </div>
                   )}
                 </div>
@@ -1983,12 +2056,19 @@ const CaseDetails = () => {
                           </button>
                         </span>
                       </div>
-                      {pdfList?.judgementsPdf}
+                      {/* {pdfList?.judgementsPdf} */}
                     </div>
                   ) : (
                     <div>
-                      <div>Judgements</div>
-                      <i className="fa-solid fa-upload"></i>
+                      <div>
+                        Judgements{" "}
+                        <span onClick={() => handlEdit(7)}>
+                          <i
+                            style={{ color: "red", marginLeft: "10px" }}
+                            className="fa-solid fa-upload fa-bounce"
+                          ></i>
+                        </span>
+                      </div>
                     </div>
                   )}
                 </div>

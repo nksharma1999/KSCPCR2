@@ -4,10 +4,11 @@ const pdfs = ["courtOrdersPdf", "judgementsPdf"];
 export const updateJudgementsPdf = (req, res) => {
   const pdfIdsMap = new Map();
   const { id } = req.params;
+  const userInfo = req.userInfo;
   if (id) {
     try {
       performPdfUpdateOperation(req, pdfs, pdfIdsMap);
-      dbUpdatePdf(id, pdfIdsMap, pdfs)
+      dbUpdatePdf(id, pdfIdsMap, pdfs,userInfo)
         .then((info) => {
           res.status(200).json(info);
         })

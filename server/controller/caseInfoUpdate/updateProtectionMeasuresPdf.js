@@ -4,11 +4,12 @@ import { dbUpdatePdf } from "../../dbOperation/dbOperation.js";
 const pdfs = ["protectionOrderPdf", "placementOrderPdf", "restrainingOrderPdf"];
 export const updateProtectionMeasuresPdf = (req, res) => {
   const pdfIdsMap = new Map();
+  const userInfo = req.userInfo;
   const { id } = req.params;
   if (id) {
     try {
       performPdfUpdateOperation(req, pdfs, pdfIdsMap);
-      dbUpdatePdf(id, pdfIdsMap, pdfs)
+      dbUpdatePdf(id, pdfIdsMap, pdfs, userInfo)
         .then((info) => {
           res.status(200).json(info);
         })
@@ -84,6 +85,7 @@ const deletePdf = (pdfId) => {
   try {
     fs.unlinkSync(`uploads/${pdfId}.pdf`);
   } catch (error) {
-    throw Error(error);
+    // throw Error(error);
+    console.error(error);
   }
 };
