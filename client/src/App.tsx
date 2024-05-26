@@ -65,6 +65,7 @@ function App() {
                   <Route path="/" element={<CaseTracker />} />
 
                   <Route path="/master-data" element={<Outlet />}>
+                    <Route index element={<Index />} />
                     <Route path="index" element={<Index />} />
                     <Route path="Village" element={<Village />} />
                     <Route path="District" element={<District />} />

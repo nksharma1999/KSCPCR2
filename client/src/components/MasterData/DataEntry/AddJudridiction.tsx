@@ -53,7 +53,7 @@ export const AddJuridiction: React.FC<Props> = ({ closeAddComponent}) => {
               <i className="fa-solid fa-building-columns" style={{ fontSize: "30px" }}></i>
             </div>
             <div style={{ marginLeft: "10px" }}>
-              <p style={{ fontSize: "20px" }}>Add New Court</p>
+              <p style={{ fontSize: "20px" }}>Add New Juridiction</p>
             </div>
           </div>
           <div style={{ border: "0.6px solid #DFDFDF", marginTop: "-10px" }}></div>
