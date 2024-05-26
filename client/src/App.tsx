@@ -9,6 +9,7 @@ import CaseDetails from "./components/Case/CaseDetails";
 import { Login } from "./components/Login/Login";
 import { Index } from "./components/MasterData/Index";
 import { CourtInfo } from "./components/MasterData/CourtInfo";
+import Court from "./components/MasterData/Court"
 import axios from "axios";
 import { IP } from "./components/utils/IP";
 const DashBoard = lazy(() => import("./components/DashBoard"));
@@ -17,6 +18,7 @@ const District = lazy(() => import("./components/MasterData/District"));
 const City = lazy(() => import("./components/MasterData/City"));
 const Taluk = lazy(() => import("./components/MasterData/Taluk"));
 const Village = lazy(() => import("./components/MasterData/Village"));
+const Juridiction = lazy(() => import('./components/MasterData/Juridiction'));
 
 function App() {
   const [auth, setAuth] = useState<boolean>(false);
@@ -69,7 +71,8 @@ function App() {
                     <Route path="State" element={<State />} />
                     <Route path="Taluk" element={<Taluk />} />
                     <Route path="City" element={<City />} />
-                    <Route path="court" element={<CourtInfo />} />
+                    <Route path="court" element={<Court />} />
+                    <Route path="juridiction" element={<Juridiction />} />
                   </Route>
                   <Route path="/case" element={<Outlet />}>
                     <Route path="case-tracker/" element={<CaseTracker />} />

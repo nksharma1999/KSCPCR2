@@ -8,13 +8,13 @@ interface Props {
   // type: string;
 }
 
-export const AddCourtInfo: React.FC<Props> = ({ closeAddComponent}) => {
+export const AddJuridiction: React.FC<Props> = ({ closeAddComponent}) => {
 
   const infoInput = useRef<HTMLInputElement>(null);
 
   const handleAddBtn = () => {
     if (infoInput.current?.value === '') {
-      WarningToast("Please Enter State Name")
+      WarningToast("Please Enter juridiction Name")
       return;
     }
 
@@ -23,7 +23,7 @@ export const AddCourtInfo: React.FC<Props> = ({ closeAddComponent}) => {
     };
     
     const id = LoadingToast("Processing...");
-    axios.post(IP.API +'court', body,{
+    axios.post(IP.API +'Jurisdiction', body,{
       headers: {
         "x-access-token": getToken(),
       },
@@ -65,10 +65,10 @@ export const AddCourtInfo: React.FC<Props> = ({ closeAddComponent}) => {
                     type="text"
                     className="form-control"
                     id="floatingInput1"
-                    placeholder={`Enter Court Name`}
+                    placeholder={`Enter Juridiction Name`}
                     ref={infoInput}
                   />
-                  <label htmlFor="floatingInput1">New Court Name</label>
+                  <label htmlFor="floatingInput1">New Juridiction Name</label>
                 </div>
               </div>
             </div>

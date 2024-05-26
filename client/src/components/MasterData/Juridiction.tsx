@@ -1,58 +1,73 @@
 import { useEffect, useState } from "react";
-import { AddCourtInfo } from "./DataEntry/AddCourtInfo";
+import { AddJuridiction } from "./DataEntry/AddJudridiction";
 import axios from "axios";
 import { IP } from "../utils/IP";
 import { EditInfo, EditinfoInterface } from "./DataEntry/EditInfo";
 import { getToken } from "../utils/getToken";
 import { LoadingToast, UpdateToastInfo } from "../utils/CustomeToast";
 
-
-export interface CourtInterface {
-  CourtId: number;
-  CourtName: string;
+export interface JuridictionInterface {
+  JurisdictionId: number;
+  JurisdictionName: string;
+  
 }
-
-export const CourtInfo = () => {
-  const [CourtList, setCourtList] = useState<CourtInterface[]>([]);
-  // console.log(CourtList);
-  const [isNewCourt, setNewCourt] = useState<boolean>(false);
+ const Juridiction  = () => {
+  const [JuridictionList, setJuridictionList] = useState<JuridictionInterface[]>([]);
+  // console.log(JuridictionList);
+  const [isNewJuridiction, setNewJuridiction] = useState<boolean>(false);
   const [showEditPage, setShowEditPage] = useState<boolean>(false);
   const [editInfo, setEditInfo] = useState<EditinfoInterface>({
     id: 0,
     name: "",
   });
-
   const showAddNewDataEntryView = () => {
-    setNewCourt(true);
+    setNewJuridiction(true);
   };
   const closeNewRolePage = () => {
-    setNewCourt(false);
+    setNewJuridiction(false);
   };
-
-  // const closeNewCourtPage = () => {
-  //   setNewCourt(false);
-  // };
-
-  const handleEdit = (info: CourtInterface) => {
-    setEditInfo({
-      id: info.CourtId,
-      name: info.CourtName,
-    });
+  const handleEdit = (info: JuridictionInterface) => {
+    setEditInfo({ id: info.JurisdictionId, name: info.JurisdictionName });
     setShowEditPage(true);
   };
-
   const closeEditPage = () => {
-    setEditInfo({ id: 0, name: "" });
+    setEditInfo({
+      id: 0,
+      name: "",
+    });
     setShowEditPage(false);
   };
+  const handleDeleteJuridiction = (info: JuridictionInterface) => {
+    const userConfirmed = window.confirm(
+      "Are you sure you want to delete this Juridiction? \n" +
+      "Name: " + info.JurisdictionName
+    );
 
+    if (userConfirmed) {
+      const id = LoadingToast();
+      axios
+        .delete(IP.API + "Jurisdiction/" + info.JurisdictionId, {
+          headers: {
+            "x-access-token": getToken(),
+          },
+        })
+        .then((res) => {
+          UpdateToastInfo(id, res.data, 'success');
+          getJuridictionList();
+        })
+        .catch((error) => {
+          // console.error(error);
+          UpdateToastInfo(id, 'Data not deleted!', 'error')
+        });
+    }
+  };
   const updateInfo = (info: EditinfoInterface) => {
     const body = {
-      courtName: info.name,
+      jurisdictionName: info.name,
     };
     const id = LoadingToast();
     axios
-      .put(IP.API + "court/" + info.id, body, {
+      .put(IP.API + "Jurisdiction/" + info.id, body, {
         headers: {
           "x-access-token": getToken(),
         },
@@ -60,62 +75,36 @@ export const CourtInfo = () => {
       .then((res) => {
         UpdateToastInfo(id, res.data, 'success');
         closeEditPage();
-        getCourtList();
+        getJuridictionList();
       })
       .catch((error) => {
-        console.error(error);
+        // console.error(error);
+        UpdateToastInfo(id, 'Data not updated', 'error');
         closeEditPage();
       });
   };
-
-  const getCourtList = () => {
+  const getJuridictionList = () => {
     axios
-      .get(IP.API + "court", {
+      .get(IP.API + "Jurisdiction", {
         headers: {
           "x-access-token": getToken(),
         },
       })
-      .then((data) => {
-        // console.log("data " , data.data);
-        setCourtList(data.data);
+      .then((res) => {
+        // console.log("res ", res.data);
+        setJuridictionList(res.data);
       })
       .catch((error) => {
         console.error(error);
       });
   };
-
-  const handleDeleteCourt = (info: CourtInterface) => {
-    const userConfirmed = window.confirm(
-      "Are you sure you want to delete this Court? \n" + "Name: " + info.CourtName
-    );
-
-    if (userConfirmed) {
-      const id = LoadingToast();
-      axios
-        .delete(IP.API + "court/" + info.CourtId, {
-          headers: {
-            "x-access-token": getToken(),
-          },
-        })
-        .then((res) => {
-          UpdateToastInfo(id, res.data, 'success');
-
-          getCourtList();
-        })
-        .catch((error) => {
-          console.error(error);
-          UpdateToastInfo(id, 'Data not deleted!', 'error')
-        });
-    }
-  };
-
   useEffect(() => {
-    getCourtList();
+    getJuridictionList();
   }, []);
-
   return (
     <>
       <div>
+
         <div className={"card "} style={{ maxHeight: "80vh", padding: "10px" }}>
           <div
             style={{
@@ -124,9 +113,10 @@ export const CourtInfo = () => {
               display: "flex",
               flexWrap: "wrap",
               justifyContent: "space-between",
+              // alignItems: "center",
             }}
           >
-            <p style={{ fontSize: "20px" }}>Court List</p>
+            <p style={{ fontSize: "20px" }}> Jurisdiction List</p>
             <div style={{ marginRight: "10px", marginTop: "0px" }}>
               <button
                 onClick={showAddNewDataEntryView}
@@ -143,25 +133,41 @@ export const CourtInfo = () => {
               </button>
             </div>
           </div>
-          <div style={{ border: "0.6px solid #DFDFDF", marginTop: "0px" }}></div>
-          <div className="ActionTakenDashboard" style={{ overflow: "auto", marginTop: "10px" }}>
+          <div
+            style={{ border: "0.6px solid #DFDFDF", marginTop: "0px" }}
+          ></div>
+          <div
+            className="ActionTakenDashboard"
+            style={{ overflow: "auto", marginTop: "10px" }}
+          >
             <table className="table table-bordered" style={{ width: "100%" }}>
               <thead className="table-format tableHeader">
                 <tr className="tableHeaderStyle">
-                  <th scope="col" style={{ width: "20px" }}>Sl. No.</th>
-                  <th scope="col">Court Name</th>
+                  <th scope="col" style={{ width: "20px" }}>
+                    Sl. No.
+                  </th>
+                  <th scope="col">Jurisdiction Name</th>
+
                   <th scope="col">Action</th>
                 </tr>
               </thead>
               <tbody>
-                {CourtList.map((val, index) => {
+                {JuridictionList.map((val, index) => {
+                  // console.log("val " , val.JuridictionName);
                   return (
                     <tr key={index} className="tableFirstThStyle">
-                      <th scope="row">{index + 1}</th>
-                      <td>{val.CourtName}</td>
-                      <td style={{ textAlign: "center", cursor: "pointer" }}>
+                      <td scope="row">{index + 1}</td>
+                      <td>{val.JurisdictionName}</td>
+
+                      <td
+                        style={{
+                          textAlign: "center",
+
+                          cursor: "pointer",
+                        }}
+                      >
                         <button
-                          onClick={() => handleEdit(val)}
+                           onClick={() => handleEdit(val)}
                           className="btn"
                           style={{
                             backgroundColor: "white",
@@ -172,7 +178,7 @@ export const CourtInfo = () => {
                           <i className="fa-solid fa-pen-to-square"></i>
                         </button>
                         <button
-                          onClick={() => handleDeleteCourt(val)}
+                         onClick={() => handleDeleteJuridiction(val)}
                           className="btn"
                           style={{
                             backgroundColor: "white",
@@ -190,19 +196,18 @@ export const CourtInfo = () => {
             </table>
           </div>
         </div>
-      </div>
-      {isNewCourt && <AddCourtInfo closeAddComponent={closeNewRolePage} />}
+      </div>     
+       {isNewJuridiction && <AddJuridiction closeAddComponent={closeNewRolePage} />}
       {showEditPage && (
         <EditInfo
           closeEditCmp={closeEditPage}
-          title="courtInfo"
+          title="Juridiction"
           info={editInfo}
           updateInfo={updateInfo}
         />
       )}
-      <div>
-      </div>
     </>
   );
 };
-export default CourtInfo;
+
+export default Juridiction;
